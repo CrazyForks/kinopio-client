@@ -1006,6 +1006,7 @@ export const useCardStore = defineStore('cards', {
       if (!list) { return }
       const cards = this.getCardsByList(list.id)
       const updates = []
+      const prevCards = []
       const originY = list.y + consts.listInfoHeight
       cards.forEach((card, index) => {
         const update = {
@@ -1015,9 +1016,12 @@ export const useCardStore = defineStore('cards', {
           height: card.height
         }
         if (index > 0) {
-          const prevCard = updates[index - 1]
+          const prevCard = prevCards[index - 1]
           update.y = prevCard.y + prevCard.height + consts.listPadding
         }
+        const cardIsUnchanged = ['x', 'y', 'height'].every(key => card[key] === update[key])
+        prevCards.push(update)
+        if (cardIsUnchanged) { return }
         updates.push(update)
       })
       this.updateCards(updates)
