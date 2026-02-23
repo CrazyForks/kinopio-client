@@ -1035,7 +1035,7 @@ export const useCardStore = defineStore('cards', {
       const globalStore = useGlobalStore()
       try {
         const ids = cards.map(card => card.id)
-        await this.updateCardsDimensions(ids)
+        this.updateCardsDimensions(ids)
         // use prev listCards to determine sibling position
         const listCards = this.getCardsByList(list.id)
         const siblingPositionIndex = utils.listSiblingPositionIndex(listCards, targetPositionIndex, shouldPrepend)
@@ -1060,8 +1060,7 @@ export const useCardStore = defineStore('cards', {
         })
         globalStore.triggerIsSnappingToList()
         this.updateCards(updates)
-        await nextTick()
-        await this.updateCardsDimensions(ids)
+        this.updateCardsDimensions(ids)
         this.updateCardPositionsInList(list)
         globalStore.clearAllSelected()
       } catch (error) {
@@ -1087,9 +1086,8 @@ export const useCardStore = defineStore('cards', {
           width: null
         }
       })
-      await this.updateCards(updates)
-      await this.clearResizeCards(ids, true)
-      await nextTick()
+      this.updateCards(updates)
+      this.clearResizeCards(ids, true)
       for (const listId of listIds) {
         const list = listStore.getList(listId)
         await this.updateCardPositionsInList(list)
