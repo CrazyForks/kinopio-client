@@ -772,7 +772,7 @@ const placeholderStylesMap = computed(() => {
         display inline-block
         // max-width calc(100% - 100px)
   .bottom-button-wrap // resize when list is collapsed
-    right -13px
+    right -5px
     top 14px
     bottom initial
   // touch locking
