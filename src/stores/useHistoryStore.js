@@ -547,6 +547,9 @@ export const useHistoryStore = defineStore('history', {
           case 'listUpdated':
             list = item.prev
             listStore.updateList(list)
+            await nextTick()
+            list = listStore.getList(list.id)
+            listStore.updateListDimensions(list)
             break
           case 'listCreated':
             list = item.new
@@ -569,7 +572,8 @@ export const useHistoryStore = defineStore('history', {
       const cardStore = useCardStore()
       const connectionStore = useConnectionStore()
       const boxStore = useBoxStore()
-
+      const lineStore = useLineStore()
+      const listStore = useListStore()
       if (globalStore.getToolbarIsDrawing) {
         globalStore.triggerDrawingRedo()
         return
@@ -585,7 +589,7 @@ export const useHistoryStore = defineStore('history', {
       for (const item of patch) {
         console.info('⏩ redo', item, { pointer: this.pointer, totalPatches: this.patches.length })
         const { action } = item
-        let card, connection, type, box, prevCard
+        let card, connection, type, box, prevCard, line, list
         switch (action) {
           // cards
           case 'cardUpdated':
@@ -639,6 +643,35 @@ export const useHistoryStore = defineStore('history', {
           case 'connectionRemoved':
             connection = item.new
             connectionStore.removeConnection(connection.id)
+            break
+          // lines
+          case 'lineUpdated':
+            line = item.new
+            lineStore.updateLine(line)
+            break
+          case 'lineCreated':
+            line = item.new
+            lineStore.createLine(line.id)
+            break
+          case 'lineRemoved':
+            line = item.new
+            lineStore.removeLine(line.id)
+            break
+          // lists
+          case 'listUpdated':
+            list = item.new
+            listStore.updateList(list)
+            await nextTick()
+            list = listStore.getList(list.id)
+            listStore.updateListDimensions(list)
+            break
+          case 'listCreated':
+            list = item.new
+            listStore.createList(list.id)
+            break
+          case 'listRemoved':
+            list = item.new
+            listStore.removeList(list.id)
             break
         }
       }
