@@ -15,7 +15,7 @@ import utils from '@/utils.js'
 import debounce from 'lodash-es/debounce'
 
 const showDebugMessages = false
-const max = 30
+const max = 100
 
 export const useHistoryStore = defineStore('history', {
   // adapted from https://twitter.com/steveruizok/status/1487052071685734410
