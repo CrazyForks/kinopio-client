@@ -568,7 +568,7 @@ const placeholderStylesMap = computed(() => {
       :class="listClasses"
     )
       //- resize
-      .bottom-button-wrap.asldfkj(v-if="!props.list.isCollapsed && resizeIsVisible" :class="{unselectable: isPaintSelecting}")
+      .bottom-button-wrap(v-if="!props.list.isCollapsed && resizeIsVisible" :class="{unselectable: isPaintSelecting}")
         .inline-button-wrap(
             @pointerover="updateIsHover(true)"
             @pointerleave="updateIsHover(false)"
@@ -654,7 +654,9 @@ const placeholderStylesMap = computed(() => {
   min-width var(--min-list-width)
   // resize
   .bottom-button-wrap
+    pointer-events none
     .inline-button-wrap
+      pointer-events all
       cursor nwse-resize
       button
         cursor nwse-resize
