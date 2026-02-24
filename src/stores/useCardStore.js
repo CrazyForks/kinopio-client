@@ -1038,6 +1038,7 @@ export const useCardStore = defineStore('cards', {
     async addCardsToList ({ cards, list, targetPositionIndex = null, shouldPrepend }) {
       const globalStore = useGlobalStore()
       try {
+        cards = utils.sortByY(cards)
         const ids = cards.map(card => card.id)
         this.updateCardsDimensions(ids)
         // use prev listCards to determine sibling position
