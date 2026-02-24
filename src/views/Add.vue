@@ -119,6 +119,9 @@ const checkIsMissingInboxSpace = async () => {
 
 const restoreValue = async (value) => {
   await nextTick()
+  // iOS app sets `window.sharedCardName` before Vue initializes
+  value = value || window.sharedCardName
+  delete window.sharedCardName
   value = value || await cache.prevAddPageValue()
   state.newName = value
   console.info('🏬 restored value', value)

@@ -232,22 +232,22 @@ template(v-if="visible")
               img.icon.json-canvas(src="@/assets/json-canvas.svg")
               span Canvas
 
-  section.export
-    // anon user
-    template(v-if="!currentUserIsSignedIn")
-      p
-        span Sign Up or In for more export options
-      button(@click.left="triggerSignUpOrInIsVisible") Sign Up or In
-    // signed in user
-    template(v-if="currentUserIsSignedIn")
-      button(@click.left="downloadAllSpacesRemote" :class="{ active: state.isLoadingAllSpaces }")
-        span Download All Spaces Backup (JSON and TXT)
-        Loader(:visible="state.isLoadingAllSpaces")
-    a#export-downlaod-anchor.hidden
-    .info-container(v-if="state.isLoadingAllSpaces")
-      .badge.info This will take a minute or so…
-    .info-container(v-if="state.unknownServerError")
-      .badge.danger (シ_ _)シ Something went wrong, Please try again or contact support
+        //- download all spaces
+        // anon user
+        template(v-if="!currentUserIsSignedIn")
+          p
+            span Sign Up or In for more export options
+          button(@click.left="triggerSignUpOrInIsVisible") Sign Up or In
+        // signed in user
+        template(v-if="currentUserIsSignedIn")
+          button(@click.left="downloadAllSpacesRemote" :class="{ active: state.isLoadingAllSpaces }")
+            span Download All Spaces Backup (JSON and TXT)
+            Loader(:visible="state.isLoadingAllSpaces")
+        a#export-downlaod-anchor.hidden
+        .info-container(v-if="state.isLoadingAllSpaces")
+          .badge.info This will take a minute or so…
+        .info-container(v-if="state.unknownServerError")
+          .badge.danger (シ_ _)シ Something went wrong, Please try again or contact support
 </template>
 
 <style lang="stylus">
