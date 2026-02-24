@@ -1056,7 +1056,6 @@ export const useCardStore = defineStore('cards', {
       const globalStore = useGlobalStore()
       try {
         cards = utils.sortByY(cards)
-        this.checkIfShouldUpdatePrevListDimensions(cards, list)
         const ids = cards.map(card => card.id)
         this.updateCardsDimensions(ids)
         // use prev listCards to determine sibling position
@@ -1085,6 +1084,8 @@ export const useCardStore = defineStore('cards', {
         this.updateCards(updates)
         this.updateCardsDimensions(ids)
         this.updateCardPositionsInList(list)
+        this.checkIfShouldUpdatePrevListDimensions(cards, list)
+
         globalStore.clearAllSelected()
       } catch (error) {
         console.error('🚒 addCardsToList', error)
