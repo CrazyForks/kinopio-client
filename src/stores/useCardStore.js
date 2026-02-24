@@ -1035,10 +1035,28 @@ export const useCardStore = defineStore('cards', {
       }
       await this.addCardsToList({ cards: [card], list, targetPositionIndex, shouldPrepend: true })
     },
+    checkIfShouldUpdatePrevListDimensions (cards, list) {
+      const listStore = useListStore()
+      let prevListIds = []
+      // get moved cards prev listIds
+      cards.forEach(card => {
+        if (!card.listId) { return }
+        if (card.listId !== list.id) {
+          prevListIds.push(card.listId)
+        }
+      })
+      // update lists
+      prevListIds = uniq(prevListIds)
+      prevListIds.forEach(id => {
+        const list = listStore.getList(id)
+        listStore.updateListDimensions(list)
+      })
+    },
     async addCardsToList ({ cards, list, targetPositionIndex = null, shouldPrepend }) {
       const globalStore = useGlobalStore()
       try {
         cards = utils.sortByY(cards)
+        this.checkIfShouldUpdatePrevListDimensions(cards, list)
         const ids = cards.map(card => card.id)
         this.updateCardsDimensions(ids)
         // use prev listCards to determine sibling position
