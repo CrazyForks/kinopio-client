@@ -147,12 +147,17 @@ export const useSpaceStore = defineStore('space', {
         return boxStore.getBox(boxId)
       })
       // connection
-      const connections = connectionStore.getAllConnections.filter(connection => {
+      let connections = connectionStore.getAllConnections.filter(connection => {
         const selectedIds = globalStore.multipleCardsSelectedIds.concat(globalStore.multipleBoxesSelectedIds)
         const isStartCardMatch = selectedIds.includes(connection.startItemId)
         const isEndCardMatch = selectedIds.includes(connection.endItemId)
         return isStartCardMatch && isEndCardMatch
       })
+      const selectedConnections = globalStore.multipleConnectionsSelectedIds.map(connectionId => {
+        return connectionStore.getConnection(connectionId)
+      })
+      connections = connections.concat(selectedConnections)
+      connections = uniqBy(connections, 'id')
       const connectionTypeIds = connections.map(connection => connection.connectionTypeId)
       const connectionTypes = connectionTypeIds.map(id => connectionStore.getConnectionType(id))
       // line
