@@ -12,6 +12,7 @@ import { useBroadcastStore } from '@/stores/useBroadcastStore'
 import Frames from '@/components/Frames.vue'
 import utils from '@/utils.js'
 import consts from '@/consts.js'
+import ProgressCircle from '@/components/ProgressCircle.vue'
 
 import { nanoid } from 'nanoid'
 
@@ -614,7 +615,7 @@ const placeholderStylesMap = computed(() => {
     //- info row
     .row.list-info-row
       .left-side
-        progress(v-if="todoListCards.length" :value="todoListCardsCompleted.length" :max="todoListCards.length" :title="todoListCardsCompletedPercent")
+        ProgressCircle(v-if="todoListCards.length" :value="todoListCardsCompleted.length" :max="todoListCards.length" :title="todoListCardsCompletedPercent" :backgroundColor="color")
         span.name(:title="props.list.name") {{ props.list.name }}
       .right-side.button-wrap
         //- add card
