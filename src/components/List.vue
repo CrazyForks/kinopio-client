@@ -615,7 +615,6 @@ const placeholderStylesMap = computed(() => {
     //- info row
     .row.list-info-row
       .left-side
-        //- progress(v-if="todoListCards.length" :value="todoListCardsCompleted.length" :max="todoListCards.length" :title="todoListCardsCompletedPercent")
         ProgressCircle(v-if="todoListCards.length" :value="todoListCardsCompleted.length" :max="todoListCards.length" :title="todoListCardsCompletedPercent" :backgroundColor="color")
         span.name(:title="props.list.name") {{ props.list.name }}
       .right-side.button-wrap
