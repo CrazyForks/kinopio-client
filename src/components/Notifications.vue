@@ -145,9 +145,6 @@ const checkIfShouldNotifySpaceOutOfSync = async () => {
   if (globalStore.isLoadingSpace) { return }
   try {
     if (!currentUserIsSignedIn.value) { return }
-    if (!spaceStore.updatedAt) {
-      return
-    } // don't check unloaded spaces
     const remoteSpace = await apiStore.getSpaceUpdatedAt({ id: spaceStore.id })
     if (!remoteSpace) { return }
     const space = spaceStore.getSpaceAllState
