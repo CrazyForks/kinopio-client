@@ -632,7 +632,6 @@ const placeholderStylesMap = computed(() => {
           button.small-button.inline-button
             img.icon.down-arrow(v-if="!props.list.isCollapsed" src="@/assets/down-arrow.svg")
             img.icon.right-arrow(v-else src="@/assets/right-arrow.svg")
-            span {{ listCards.length }}
       //- resize collapsed
       .bottom-button-wrap(v-if="props.list.isCollapsed && resizeIsVisible" :class="{unselectable: isPaintSelecting}")
         .inline-button-wrap(
@@ -743,10 +742,11 @@ const placeholderStylesMap = computed(() => {
     .icon.down-arrow
       vertical-align 1.5px
       margin 0
+      padding-left 1px
     .icon.right-arrow
       transform none
       vertical-align 1px
-      margin-left 5px
+      margin-left 4px
       margin-right 1px
     .icon.add
       width 8px
