@@ -17,7 +17,8 @@ const props = defineProps({
     type: Number,
     default: 16
   },
-  backgroundColor: String
+  backgroundColor: String,
+  count: String
 })
 
 const state = reactive({
@@ -67,6 +68,8 @@ const colorClasses = computed(() => {
       :stroke-dashoffset="dashOffset"
       :style="{ transform: `rotate(-90deg)`, transformOrigin: 'center' }"
     )
+  .count(v-if="props.count")
+    span {{ props.count }}
 </template>
 
 <style lang="stylus" scoped>
@@ -93,4 +96,10 @@ const colorClasses = computed(() => {
   .progress-value
     display block
     line-height 1
+  .count
+    position absolute
+    margin-top -3px
+    span
+      color var(--background-color)
+      font-size 10px
 </style>

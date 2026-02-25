@@ -81,6 +81,11 @@ const todoListCardsCompleted = computed(() => {
   const cards = todoListCards.value
   return cards.filter(card => utils.nameIsChecked(card.name))
 })
+const todoListCardsRemaningCount = computed(() => {
+  let cards = todoListCards.value
+  cards = cards.filter(card => !utils.nameIsChecked(card.name))
+  return cards.length.toString()
+})
 const todoListCardsCompletedPercent = computed(() => {
   let value = todoListCardsCompleted.value.length / todoListCards.value.length
   value = Math.round(value * 100)
@@ -615,7 +620,7 @@ const placeholderStylesMap = computed(() => {
     //- info row
     .row.list-info-row
       .left-side
-        ProgressCircle(v-if="todoListCards.length" :value="todoListCardsCompleted.length" :max="todoListCards.length" :title="todoListCardsCompletedPercent" :backgroundColor="color")
+        ProgressCircle(v-if="todoListCards.length" :value="todoListCardsCompleted.length" :max="todoListCards.length" :title="todoListCardsCompletedPercent" :backgroundColor="color" :count="todoListCardsRemaningCount")
         span.name(:title="props.list.name") {{ props.list.name }}
       .right-side.button-wrap
         //- add card
