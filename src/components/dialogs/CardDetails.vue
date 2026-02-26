@@ -416,6 +416,9 @@ const closeCard = async () => {
   if (tags.length) {
     await apiStore.addToQueue({ name: 'updateTags', body: { tags } })
   }
+  if (cardHasName) {
+    spaceStore.updateSpaceEditedAt()
+  }
 }
 
 // share url
