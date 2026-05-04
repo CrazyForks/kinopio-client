@@ -108,16 +108,23 @@ export default {
 
   roadmapSpaceId () {
     if (this.isDevelopment()) {
-      return 'FiM7akGos18Sfx4yKrwjF'
+      return 'i6l8R_lSxtsSr3roZ_IEV'
     } else {
       return '3CBHtivu7X7nTzrcaTFQV'
     }
   },
   changelogSpaceId () {
     if (this.isDevelopment()) {
-      return 'ezP9B9r2U0CUYR8g-Mn9N'
+      return 'Y21yhTMPRE2uFSSplLtHR'
     } else {
       return '6lsytK8ZfOtMl2oqG05Rj'
+    }
+  },
+  affiliateSpaceId () {
+    if (this.isDevelopment()) {
+      return '1kR5AsvvdpD7x2zxjHLh9'
+    } else {
+      return 'YNmS6C3fofN3R9mYgO1Bu'
     }
   },
 
@@ -151,6 +158,11 @@ export default {
         price: 40,
         priceId: 'price_1S2d0XDFIr5ywhwoDHendW1U',
         devPriceId: 'price_1S2dWKDFIr5ywhwoioe6WQAo'
+      },
+      life: {
+        price: 200,
+        priceId: 'price_1SZYkQDFIr5ywhwoVPO24ScV',
+        devPriceId: 'price_1TSKwJDFIr5ywhwo9oqHxNIn'
       }
     },
     apple: {
@@ -170,7 +182,7 @@ export default {
     } else if (period === 'year') {
       return this.yearlyPrice(isStudentDiscount)
     } else if (period === 'life') {
-      return this.lifetimePrice()
+      return this.lifetimePrice(isStudentDiscount)
     }
   },
   // mo
@@ -247,7 +259,8 @@ export default {
     }
     return price
   },
-  lifetimePrice () {
+  // life
+  lifetimeStandardPrice () {
     const price = {
       amount: this.prices.standard.life.price,
       period: 'life',
@@ -257,6 +270,24 @@ export default {
       price.stripePriceId = this.prices.standard.life.devPriceId
     }
     return price
+  },
+  lifetimeStudentPrice () {
+    const price = {
+      amount: this.prices.education.life.price,
+      period: 'life',
+      stripePriceId: this.prices.education.life.priceId
+    }
+    if (this.isDevelopment()) {
+      price.stripePriceId = this.prices.education.life.devPriceId
+    }
+    return price
+  },
+  lifetimePrice (isStudentDiscount) {
+    if (isStudentDiscount) {
+      return this.lifetimeStudentPrice()
+    } else {
+      return this.lifetimeStandardPrice()
+    }
   }
 
 }
