@@ -553,7 +553,6 @@ export const useGlobalStore = defineStore('global', {
     triggerDrawConnectionFrame (event) {},
     triggerCancelLocking () {},
     triggerUpdateOtherCard (cardId) {},
-    triggerUpdateCardDetailsCardName (options) {},
     triggerCloseChildDialogs () {},
     triggerOfflineIsVisible () {},
     triggerAppsAndExtensionsIsVisible () {},

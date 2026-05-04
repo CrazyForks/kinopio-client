@@ -77,11 +77,6 @@ onMounted(() => {
         if (!cardId) { return }
         prevCardId = cardId
         showCard(cardId)
-      } else if (name === 'triggerUpdateCardDetailsCardName') {
-        const { cardId, name } = args[0]
-        if (cardId !== card.value.id) { return }
-        cancelOpening()
-        updateCardName(name)
       } else if (name === 'triggerUpdateCardDimensionsAndPaths') {
         const cardId = args[0]
         if (cardId !== card.value.id) { return }
