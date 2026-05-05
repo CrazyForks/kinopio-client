@@ -59,18 +59,24 @@ const updateSystemTheme = () => {
 
 // toc
 
-const items = computed(() => [
-  { name: 'All', link: '#all', color: 'khaki' },
-  { name: 'Users', link: '#users', color: '#b9a8ff' },
-  { name: 'Spaces', link: '#spaces', color: 'pink' },
-  { name: 'Cards', link: '#cards', color: 'violet' },
-  { name: 'Connections', link: '#connections', color: 'salmon' },
-  { name: 'Boxes', link: '#boxes', color: 'lightskyblue' },
-  { name: 'Lists', link: '#lists', color: '#f9cb77' },
-  { name: 'Tags', link: '#tags', color: 'mediumaquamarine' },
-  { name: 'Notifications', link: '#notifications', color: 'darkseagreen' },
-  { name: 'Other', link: '#other', color: 'cadetblue' }
-])
+const items = computed(() => {
+  const sections = [
+    { name: 'All', color: 'khaki' },
+    { name: 'Users', color: '#b9a8ff' },
+    { name: 'Spaces', color: 'pink' },
+    { name: 'Cards', color: 'violet' },
+    { name: 'Connections', color: 'salmon' },
+    { name: 'Boxes', color: 'lightskyblue' },
+    { name: 'Lists', color: '#f9cb77' },
+    { name: 'Tags', color: 'mediumaquamarine' },
+    { name: 'Notifications', color: 'darkseagreen' },
+    { name: 'Other', color: 'cadetblue' }
+  ]
+  return sections.map(item => {
+    item.link = `#${item.name.toLowerCase()}`
+    return item
+  })
+})
 </script>
 
 <template lang="pug">
@@ -85,8 +91,7 @@ AboutJsonLd
         ul.api-contents
           li(v-for="item in items")
             a(:href="item.link")
-              .badge(:style="{ background: item.color }") {{item.name}}
-
+              .badge.button-badge(:style="{ background: item.color }") {{item.name}}
         article.api
           //- img.cat(src="https://kinopio.club/help/assets/cat.png")
           ApiDocs
@@ -96,7 +101,22 @@ AboutJsonLd
 </template>
 
 <style lang="stylus">
-// article.api
+ul.api-contents
+  padding 0
+  position sticky
+  top 45px
+  z-index 10
+  li
+    list-style none
+    display inline-block
+    a
+      text-decoration none
+
+article.api
+  .anchor
+    padding-top 100px // offset anchor link
+    margin-top -100px
+    display block
 //   .cat
 //     width 100px
 </style>
