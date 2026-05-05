@@ -44,6 +44,15 @@ const router = {
         next()
       }
     }, {
+      path: '/api',
+      name: 'api',
+      component: () => import('./views/Api.vue'),
+      beforeEnter: (to, from, next) => {
+        const globalStore = useGlobalStore()
+        resetStoresForStaticPage()
+        next()
+      }
+    }, {
       path: '/',
       alias: aboutPaths,
       name: 'about',
