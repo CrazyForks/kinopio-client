@@ -74,7 +74,7 @@ export default defineConfig(async ({ command, mode }) => {
     ssgOptions: {
       entry: 'src/main.js',
       includedRoutes (paths, routes) {
-        return ['/', '/about']
+        return ['/', '/about', '/api']
       }
     },
     test: {

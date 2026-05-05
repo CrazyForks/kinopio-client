@@ -1,4 +1,7 @@
 <script setup>
+
+// update router.js, vite.config.js ssgOptions.includedRoutes
+
 import { reactive, computed, onMounted, onUnmounted, onBeforeUnmount, watch, ref, nextTick } from 'vue'
 
 import { useGlobalStore } from '@/stores/useGlobalStore'
