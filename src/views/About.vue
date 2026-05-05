@@ -65,7 +65,7 @@ const updateSystemTheme = () => {
 <template lang="pug">
 AboutJsonLd
 .page(:class="{ 'is-dark-theme': isThemeDark }")
-  Header(:isAboutPage="true")
+  Header(:isDocumentPage="true")
   main.page(@click="closeAllDialogs")
     .page-wrap
       section.intro

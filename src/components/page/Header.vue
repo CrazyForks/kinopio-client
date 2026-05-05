@@ -34,7 +34,7 @@ onBeforeUnmount(() => {
 
 const props = defineProps({
   visible: Boolean,
-  isAboutPage: Boolean,
+  isDocumentPage: Boolean,
   isGroupPage: Boolean
 })
 const state = reactive({
@@ -89,7 +89,7 @@ const toggleAppsAndExtensionsIsVisible = () => {
               KeyboardShortcuts(:visible="state.keyboardShortcutsIsVisible")
               Donate(:visible="state.donateIsVisible")
         .right
-          template(v-if="props.isAboutPage")
+          template(v-if="props.isDocumentPage")
             .button-wrap
               button.translucent-button(@click.left.stop="togglePricingIsVisible" :class="{ active: pricingIsVisible }")
                 span Pricing
