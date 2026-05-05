@@ -192,48 +192,29 @@ header
   z-index 1
 
 main.page
-  user-select text
-  padding-top 6rem
-  padding-bottom 4rem
-  margin 0
-  color var(--primary)
-  background-color var(--primary-background)
-  min-height 100dvh
-  .page-wrap
-    margin-left auto
-    margin-right auto
-    max-width 755px
-    @media(max-width 760px)
-      max-width 600px
+  section.subsection
+    display flex
+    align-items center
 
-    > section
-      width 100%
-      margin-bottom 2rem
-      padding 0 20px
-      section.subsection
-        display flex
-        align-items center
+  table
+    margin 0
+    td
+      padding 8px
+    .user
+      margin-right 6px
+      display flex
+      align-items center
 
+  h1,
+  h2
+    font-size 21px
+    max-width 400px
+  h1
+    font-size 24px
+
+  .commissions
+    .commissions-status
+      margin-bottom 10px
     table
-      margin 0
-      td
-        padding 8px
-      .user
-        margin-right 6px
-        display flex
-        align-items center
-
-    h1,
-    h2
-      font-size 21px
-      max-width 400px
-    h1
-      font-size 24px
-
-    .commissions
-      .commissions-status
-        margin-bottom 10px
-      table
-        margin-top 1rem
-
+      margin-top 1rem
 </style>

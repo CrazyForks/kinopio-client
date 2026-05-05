@@ -7,6 +7,7 @@ import webSocketPlugin from './stores/plugins/webSocketPlugin'
 import { useUserStore } from './stores/useUserStore'
 
 import './assets/main.styl'
+import './assets/page.styl'
 
 export const createApp = ViteSSG(
   // the root component
