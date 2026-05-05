@@ -24,10 +24,13 @@ The API is limited to 5 requests per second. If you exceed this rate, you will r
 
 [https://api.kinopio.club](https://api.kinopio.club) is the base path for all routes
 
+<div class="table-wrap all">
+
 Method | Name | Description | Auth
 --- | --- | --- | ---
 `GET` | <code class="all">/</code> | Confirm that the API server is online | None
 
+</div>
 
 
 
@@ -39,6 +42,8 @@ Users are representations of any account on Kinopio. Users are created by the se
 <h3 class="badge users">User Routes</h3>
 
 Routes with Auth as `apiKey` mean that the Authorization header apiKey must match the requested user.
+
+<div class="table-wrap users">
 
 Method | Path | Description | Auth
 --- | --- | --- | ---
@@ -60,7 +65,11 @@ Method | Path | Description | Auth
 `GET`   | <code class="users">/user/todos</code>                  | Get todo cards and boxes (item names start with `[]`, `[ ]`, or `[x]`), grouped by space                                                                            | `apiKey`
 `PATCH` | <code class="users">/user</code>                        | Update the authenticating user(s) based on an object body with user attributes. You can't patch `apiKey`, `password`, `emailIsVerified`, or `email`       | `apiKey`
 
+</div>
+
 <h3 class="badge users">User Attributes</h3>
+
+<div class="table-wrap users">
 
 Name | Type | Description
 --- | --- | ---
@@ -125,6 +134,7 @@ Name | Type | Description
 <code class="users">studentDiscountIsAvailable</code>       | `Boolean` | Whether the user is eligible for a student discount. Is not user updateable
 <code class="users">shouldShowMinimap</code>                | `Boolean` | Whether the bottom-right minimap is persistently visible
 
+</div>
 
 
 
@@ -138,6 +148,8 @@ Spaces are where your <a href="#cards" class="badge cards">Cards</a> and <a href
 Routes with Auth `canViewSpace` or `canEditSpace` requires that your Authorization apiKey belongs to a user with the permission to view or edit the space.
 
 The `closed` privacy state refers to `Public Read Only`.
+
+<div class="table-wrap spaces">
 
 Method | Path | Description | Auth
 --- | --- | --- | ---
@@ -163,7 +175,11 @@ Method | Path | Description | Auth
 `DELETE` | <code class="spaces">/space/permanent</code>             | Permanently remove space(s) specified in request body                                             | `canEditSpace`
 `DELETE` | <code class="spaces">/space/collaborator</code>          | Removes collaborator user from space. Request Body Keys: `spaceId`, `userId`                      | `canEditSpace`
 
+</div>
+
 <h3 class="badge spaces">Space Attributes</h3>
+
+<div class="table-wrap spaces">
 
 Name | Type | Description
 --- | --- | ---
@@ -211,6 +227,7 @@ Name | Type | Description
 <code class="spaces">visits</code>              | `Integer` | The number of times the space has been loaded by a person
 <code class="spaces">readOnlyKey</code>         | `String`  | Similar to `collaboratorKey` but only allows users and non-signed-in users to read a private space
 
+</div>
 
 
 
@@ -222,6 +239,8 @@ Cards are the building blocks of <a href="#spaces" class="badge spaces">Spaces</
 <h3 class="badge cards">Cards Routes</h3>
 
 Routes with Auth `canEditSpace` requires that your Authorization apiKey belongs to a user with the permission to edit the space that the card belongs to.
+
+<div class="table-wrap cards">
 
 Method | Path | Description | Auth
 --- | --- | --- | ---
@@ -242,7 +261,11 @@ Method | Path | Description | Auth
 `DELETE`  | <code class="cards">/card</code>                        | Remove card specified in body                                                                                                                                                       | `canEditSpace`
 `DELETE`  | <code class="cards">/card/permanent</code>              | Permanently remove card specified in body                                                                                                                                           | `canEditSpace`
 
+</div>
+
 <h3 class="badge cards">Card Attributes</h3>
+
+<div class="table-wrap cards">
 
 Name | Type | Description
 --- | --- | ---
@@ -291,6 +314,7 @@ Name | Type | Description
 <code class="cards">y</code>                        | `Integer` | The y-axis position
 <code class="cards">z</code>                        | `Integer` | The z-axis position
 
+</div>
 
 
 
@@ -303,6 +327,8 @@ Connections are the lines that connect cards together.
 
 Routes with Auth `canEditSpace` requires that your Authorization apiKey belongs to a user with the permission to edit the space that the connection belongs to.
 
+<div class="table-wrap connections">
+
 Method | Path | Description | Auth
 --- | --- | --- | ---
 `GET`     | <code class="connections">/connection/<br/>:connectionId</code> | Get info on a connection                                                                                    | None
@@ -310,7 +336,11 @@ Method | Path | Description | Auth
 `PATCH`   | <code class="connections">/connection</code>                    | Update connection(s) from object in request body. `spaceId` cannot be patched.                              | `canEditSpace`
 `DELETE`  | <code class="connections">/connection</code>                    | Permenently remove connection(s) speced in req body                                                         | `canEditSpace`
 
+</div>
+
 <h3 class="badge connections">Connection Attributes</h3>
+
+<div class="table-wrap connections">
 
 Name | Type | Description
 --- | --- | ---
@@ -331,6 +361,7 @@ Name | Type | Description
 <code class="connections">startItemId</code>       | `String` | The card or box that the connection line starts from
 <code class="connections">updatedAt</code>         | `String`  | The date when any changes to the connection were made
 
+</div>
 
 
 
@@ -343,6 +374,8 @@ Boxes are items used by users to contain or organize cards in a space. They can 
 
 Routes with Auth `canEditSpace` requires that your Authorization apiKey belongs to a user with the permission to edit the space that the box belongs to.
 
+<div class="table-wrap boxes">
+
 Method | Path | Description | Auth
 --- | --- | --- | ---
 `GET`     | <code class="boxes">/box/:boxId</code>  | Get info on a box                                                         | `canViewSpace`
@@ -350,7 +383,11 @@ Method | Path | Description | Auth
 `PATCH`   | <code class="boxes">/box</code>         | Update box from object in request body                                    | `canEditSpace`
 `DELETE`  | <code class="boxes">/box</code>         | Permenently remove box, from object in request body                       | `canEditSpace`
 
+</div>
+
 <h3 class="badge boxes">Box Attributes</h3>
+
+<div class="table-wrap boxes">
 
 Name | Type | Description
 --- | --- | ---
@@ -376,6 +413,7 @@ Name | Type | Description
 <code class="boxes">y</code>              | `Integer` | The y-axis position of the box origin
 <code class="boxes">z</code>              | `Integer` | The z-axis position
 
+</div>
 
 
 
@@ -388,6 +426,8 @@ Lists are items used by users to vertically contain and organize cards in a spac
 
 Routes with Auth `canEditSpace` requires that your Authorization apiKey belongs to a user with the permission to edit the space that the list belongs to.
 
+<div class="table-wrap lists">
+
 Method | Path | Description | Auth
 --- | --- | --- | ---
 `GET`     | <code class="lists">/list/:listId</code>    | Get info on a list, including cards                                                             | `canViewSpace`
@@ -395,7 +435,11 @@ Method | Path | Description | Auth
 `PATCH`   | <code class="lists">/list</code>            | Update list from object in request body. Body object must contain `id` and `spaceId`            | `canEditSpace`
 `DELETE`  | <code class="lists">/list/</code>           | Permenently remove list in request body. Body object must contain `id` and `spaceId`            | `canEditSpace`
 
+</div>
+
 <h3 class="badge lists">List Attributes</h3>
+
+<div class="table-wrap lists">
 
 Name | Type | Description
 --- | --- | ---
@@ -414,6 +458,8 @@ Name | Type | Description
 <code class="lists">y</code>                                          | `Integer` | The y-axis position of the list origin
 <code class="lists">z</code>                                          | `Integer` | The z-axis position
 
+</div>
+
 
 
 <a class="anchor" data-section="🦚" name="tags"></a>
@@ -425,13 +471,19 @@ Each tag you add to a card is considered a seperate entity. So if you have two c
 
 Routes with Auth `canEditSpace` requires that your Authorization apiKey belongs to a user with the permission to edit the space that the tag belongs to.
 
+<div class="table-wrap tags">
+
 Method | Path | Description | Auth
 --- | --- | --- | ---
 `GET`     | <code class="tags">/tags/:tagName</code>          | Get all tags with tagName in your <a href="#spaces" class="badge spaces">Spaces</a>                                                                      | `apiKey`
 `GET`     | <code class="tags">/tags/by-card/:cardId</code>   | Get all tags in a <a href="#cards" class="badge cards">Cards</a>                                                                                        | `apiKey`
 `PATCH`   | <code class="tags">/tags/color</code>             | Change the color of all tags with the name specified in request body. Object must contain `name`, `color`     | `apiKey`
 
+</div>
+
 <h3 class="badge tags">Tags Attributes</h3>
+
+<div class="table-wrap lists">
 
 Name | Type | Description
 --- | --- | ---
@@ -444,6 +496,7 @@ Name | Type | Description
 <code class="tags">updatedAt</code>      | `String`  | The date when any changes were made to the tag
 <code class="tags">userId</code> | `String` | The user who created the tag
 
+</div>
 
 
 
@@ -456,11 +509,17 @@ Notifications are created when another user adds a card in a space that you're a
 
 Routes with Auth as `apiKey` mean that the Authorization header apiKey must match the requested user.
 
+<div class="table-wrap notifications">
+
 Method | Path | Description | Auth
 --- | --- | --- | ---
 `GET`   | <code class="notifications">/notifications</code>  | Get the last 50 notifications for the current user | `apiKey`
 
+</div>
+
 <h3 class="badge notifications">Notifications Attributes</h3>
+
+<div class="table-wrap notifications">
 
 Name | Type | Description
 --- | --- | ---
@@ -478,6 +537,7 @@ Name | Type | Description
 <code class="notifications">userId</code>  | `String` | The user that created the notification
 <code class="notifications">updatedAt</code>      | `String`  | The date when any changes were made to the notification
 
+</div>
 
 
 
@@ -488,6 +548,8 @@ Other routes used by the kinopio-client app, which you can also use in your inte
 
 <h3 class="badge other">other Routes</h3>
 
+<div class="table-wrap other">
+
 Method | Path | Description | Auth
 --- | --- | --- | ---
 `GET`   | <code class="other">/affiliate</code>  | returns affiliate info, promo url, commissions earned, and pending payout | `AffiliateUser`
@@ -496,3 +558,5 @@ Method | Path | Description | Auth
 `GET`   | <code class="other">/meta/changelog</code>  | Lists recent Kinopio new feature updates | None
 `GET`   | <code class="other">/meta/emojis</code>  | List of [unicode emojis](https://github.com/muan/unicode-emoji-json/blob/main/data-by-group.json) for the emoji picker | None
 `GET`   | <code class="other">/meta/random-name</code>  | returns a random word space name – based on the logic formerly used to generate space names | None
+
+</div>
