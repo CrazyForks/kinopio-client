@@ -8,15 +8,8 @@ import { useUserStore } from '@/stores/useUserStore'
 import AboutJsonLd from '@/components/page/about/AboutJsonLd.vue'
 import Header from '@/components/page/Header.vue'
 import Wordmark from '@/components/page/Wordmark.vue'
-// import AboutSocialProof from '@/components/page/about/AboutSocialProof.vue'
-// import AboutHowTo from '@/components/page/about/AboutHowTo.vue'
-// import AboutExamples from '@/components/page/about/AboutExamples.vue'
-// import AboutMoreFeatures from '@/components/page/about/AboutMoreFeatures.vue'
-// import AboutCollaborate from '@/components/page/about/AboutCollaborate.vue'
-// import AboutFAQ from '@/components/page/about/AboutFAQ.vue'
 import FooterSitemap from '@/components/page/FooterSitemap.vue'
 import Footer from '@/components/page/Footer.vue'
-// import Notifications from '@/components/Notifications.vue'
 import consts from '@/consts.js'
 
 const globalStore = useGlobalStore()
@@ -72,6 +65,7 @@ AboutJsonLd
       section.intro
         Wordmark
         h2 API Documentation
+
         p [api docs]
 
       FooterSitemap
