@@ -7,6 +7,7 @@ import { useGlobalStore } from '@/stores/useGlobalStore'
 import utils from '@/utils.js'
 
 import { colord } from 'colord'
+import randomColor from 'randomcolor'
 
 const themes = {
   light: {
@@ -44,8 +45,7 @@ const themes = {
       'badge-donor': '#ff9dff',
       'badge-upgraded': 'springgreen',
       // /about page sections
-      'example-background': '#889e9a',
-      'at-work-background': '#94b5c7'
+      'example-background': '#889e9a'
     }
   },
   dark: {
@@ -85,8 +85,7 @@ const themes = {
       'badge-moderator': 'olive',
       'badge-ambassador': '#0f9189',
       // /about page sections
-      'example-background': '#14292d',
-      'at-work-background': '#002c43'
+      'example-background': '#14292d'
     }
   }
 }
@@ -218,6 +217,17 @@ export const useThemeStore = defineStore('theme', {
         background
       }
       return { isDarkTheme, theme }
+    },
+
+    // color
+
+    randomColor () {
+      const isDarkTheme = this.getIsThemeDark
+      let color = randomColor({ luminosity: 'light' })
+      if (isDarkTheme) {
+        color = randomColor({ luminosity: 'dark' })
+      }
+      return color
     }
   }
 })

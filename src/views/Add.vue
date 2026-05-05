@@ -58,10 +58,12 @@ onMounted(async () => {
   initCardTextarea()
   restoreValue()
   checkIsMissingInboxSpace()
+  window.addEventListener('resize', updateTextareaSize)
 })
 
 onBeforeUnmount(() => {
   cache.clearPrevAddPageValue()
+  window.removeEventListener('resize', updateTextareaSize)
 })
 
 const isOffline = computed(() => !globalStore.isOnline)
@@ -114,6 +116,16 @@ const checkIsMissingInboxSpace = async () => {
     state.error.isMissingInboxSpace = true
   }
 }
+const nameImageUrl = computed(() => {
+  const url = utils.urlFromString(state.newName)
+  if (!url) { return }
+  const isImage = utils.urlIsImage(url)
+  if (isImage) {
+    return url
+  } else {
+    return null
+  }
+})
 
 // postmesage
 
@@ -193,7 +205,7 @@ const addCard = async () => {
       userId: user.id
     }
     const url = utils.urlFromString(newName)
-    if (url) {
+    if (utils.urlIsWebsite(url)) {
       card.urlPreviewUrl = url
       card.shouldUpdateUrlPreview = true
     }
@@ -302,6 +314,7 @@ main.add-page
             span Add to Inbox
           .badge.label-badge.enter-badge(v-if="state.keyboardShortcutTipIsVisible")
             span Enter
+        img.preview-image(v-if="nameImageUrl" :src="nameImageUrl")
       Transition(name="fadeIn")
         .row(v-if="state.success")
           .badge.success
@@ -338,7 +351,6 @@ main.add-page
   min-height 100vh
   height 100%
   margin-top 6px
-  margin-bottom 2rem
   background var(--primary-background)
   section
     position relative
@@ -419,4 +431,9 @@ main.add-page
   justify-content space-between
   align-items center
 
+.preview-image
+  width auto
+  height 31px
+  margin-left 6px
+  border-radius var(--entity-radius)
 </style>

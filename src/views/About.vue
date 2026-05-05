@@ -11,10 +11,11 @@ import AboutSocialProof from '@/components/page/about/AboutSocialProof.vue'
 import AboutHowTo from '@/components/page/about/AboutHowTo.vue'
 import AboutExamples from '@/components/page/about/AboutExamples.vue'
 import AboutMoreFeatures from '@/components/page/about/AboutMoreFeatures.vue'
-import AboutAtWork from '@/components/page/about/AboutAtWork.vue'
+import AboutCollaborate from '@/components/page/about/AboutCollaborate.vue'
 import AboutFAQ from '@/components/page/about/AboutFAQ.vue'
 import FooterSitemap from '@/components/page/FooterSitemap.vue'
 import Footer from '@/components/page/Footer.vue'
+import Notifications from '@/components/Notifications.vue'
 import consts from '@/consts.js'
 
 const globalStore = useGlobalStore()
@@ -40,6 +41,8 @@ onMounted(() => {
   }
   if (consts.isDevelopment()) {
     document.title = '[DEV] Kinopio'
+  } else {
+    document.title = 'Kinopio'
   }
 })
 
@@ -79,7 +82,7 @@ AboutJsonLd
           height="511"
         )
           source(src="https://updates.kinopio.club/page/about/hero/1.webm")
-        p Kinopio is a note-taking canvas for collecting and connecting your thoughts, ideas, and feelings. Community-funded and{{' '}}
+        p Kinopio is a note-taking canvas for collecting and connecting your thoughts, ideas, and plans by yourself or collaboratively. Community-funded and{{' '}}
           a(href="https://pketh.org/organic-software.html") built for the long-term
           span .
         p Free for 100 cards. No sign up required.
@@ -95,7 +98,7 @@ AboutJsonLd
 
       AboutExamples
 
-      AboutAtWork
+      AboutCollaborate
 
       AboutFAQ
 
@@ -125,6 +128,9 @@ AboutJsonLd
           a(href="mailto:hi@kinopio.club") hi@kinopio.club
       FooterSitemap
   Footer
+.notifications-wrap
+  .left
+    Notifications
 </template>
 
 <style lang="stylus">
@@ -185,4 +191,15 @@ main.page
     .signature
       width 70px
       margin 0
+
+.notifications-wrap
+  position fixed
+  left 0
+  right 0
+  bottom 40px
+  padding 8px
+  max-width 100%
+  pointer-events none
+  transform-origin left bottom
+  margin-bottom env(safe-area-inset-bottom)
 </style>

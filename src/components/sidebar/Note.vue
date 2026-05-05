@@ -16,12 +16,22 @@ const textareaElement = ref(null)
 onMounted(() => {
   focusTextarea()
   textareaSizes()
+  window.addEventListener('pointerup', clearCurrentConnection)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('pointerup', clearCurrentConnection)
 })
 
 const props = defineProps({
   visible: Boolean,
   subsectionHeight: Number
 })
+
+const state = reactive({
+  backgroundColor: null
+})
+
 watch(() => props.visible, (value, prevValue) => {
   if (value) {
     focusTextarea()
@@ -81,6 +91,65 @@ const copyText = async (event) => {
     globalStore.addNotificationWithPosition({ message: 'Copy Error', position, type: 'danger', layer: 'app', icon: 'cancel' })
   }
 }
+
+const isSignedIn = computed(() => userStore.getUserIsSignedIn)
+const isSpaceMember = computed(() => userStore.getUserIsSpaceMember)
+const canEdit = computed(() => isSignedIn.value && isSpaceMember.value)
+const triggerSignUpOrInIsVisible = () => {
+  globalStore.closeAllDialogs()
+  globalStore.triggerSignUpOrInIsVisible()
+}
+
+const textareaStyles = computed(() => {
+  let borderRadius = 0
+  if (state.backgroundColor) {
+    borderRadius = utils.cssVariable('entity-radius')
+  }
+  return {
+    backgroundColor: state.backgroundColor,
+    borderRadius
+  }
+})
+
+// connect to copy
+
+const clearCurrentConnection = () => {
+  state.backgroundColor = null
+}
+const mouseenter = (event) => {
+  if (!globalStore.currentUserIsDrawingConnection) { return }
+  state.backgroundColor = globalStore.currentConnectionColor
+}
+const mouseleave = (event) => {
+  clearCurrentConnection()
+}
+const copyCurrentConnectionItemNamesToNote = (event) => {
+  if (!globalStore.currentUserIsDrawingConnection) { return }
+  globalStore.closeAllDialogs()
+  // item names
+  let items = globalStore.currentConnectionStartItemIds.map(id => spaceStore.getSpaceItemById(id))
+  items = utils.sortByY(items)
+  let newText = ''
+  items.forEach((item, index) => {
+    let itemName = ''
+    if (index) {
+      itemName = '\n\n'
+    }
+    itemName += item.name
+    newText += itemName
+  })
+  // append to note
+  const note = spaceNote.value
+  let newValue
+  if (note) {
+    newValue = `${note}\n\n${newText}`
+  } else {
+    newValue = newText
+  }
+  spaceNote.value = newValue
+  clearCurrentConnection()
+  focusTextarea()
+}
 </script>
 
 <template lang="pug">
@@ -88,18 +157,33 @@ section.note(v-if="visible" :style="styles")
   .row.title-row
     div
       span Private Note
-    button.small-button(title="Copy to Clipboard" @click="copyText")
+    button.small-button(v-if="canEdit" title="Copy to Clipboard" @click="copyText")
       img.icon.copy(src="@/assets/copy.svg")
       span Copy
 
-  textarea.name(
-    data-1p-ignore
-    autocomplete="off"
-    ref="textareaElement"
-    rows="2"
-    placeholder="Type a note for this space here. Only you can see this."
-    v-model="spaceNote"
-  )
+  section.subsection(v-if="!isSignedIn")
+    p
+      span.badge.info Sign Up or In
+      span to write private notes for this space
+    button(@click.left="triggerSignUpOrInIsVisible") Sign Up or In
+  section.subsection(v-else-if="!isSpaceMember")
+    p Only members of this space can write private notes
+
+  .textarea-wrap
+    textarea.name(
+      v-if="canEdit"
+      data-1p-ignore
+      autocomplete="off"
+      ref="textareaElement"
+      rows="2"
+      placeholder="Type a note for this space here. Only you can see this."
+      v-model="spaceNote"
+      @mouseenter="mouseenter"
+      @mouseleave="mouseleave"
+      @mouseup.left="copyCurrentConnectionItemNamesToNote"
+      :style="textareaStyles"
+    )
+    .focusing-frame(v-if="state.backgroundColor" :style="{backgroundColor: state.backgroundColor}")
 </template>
 
 <style lang="stylus">
@@ -107,4 +191,20 @@ section.note
   overflow auto
   .tips
     margin-bottom 10px
+  .textarea-wrap
+    position relative
+    textarea
+      margin-bottom 100px
+    .focusing-frame
+      animation-iteration-count 400 // infinite
+      width 100%
+      height 100%
+
+  @keyframes focusing
+    100%
+      left calc(-1 * var(--small-focus-padding) / 2)
+      top calc(-1 * var(--small-focus-padding) / 2)
+      width calc(100% + var(--small-focus-padding))
+      height: calc(100% + var(--small-focus-padding))
+      border-radius calc(2 * var(--entity-radius))
 </style>

@@ -34,7 +34,7 @@ import Lines from '@/components/Lines.vue'
 import Lists from '@/components/Lists.vue'
 import Connections from '@/components/Connections.vue'
 import ItemUnlockButtons from '@/components/ItemUnlockButtons.vue'
-import AxisGuideLines from '@/components/AxisGuideLines.vue'
+import ItemSnapAlignGuideLines from '@/components/ItemSnapAlignGuideLines.vue'
 
 import Header from '@/components/Header.vue'
 import PaintSelectCanvas from '@/components/layers/PaintSelectCanvas.vue'
@@ -120,6 +120,7 @@ const init = async () => {
   checkIfShouldShowExploreOnLoad()
   historyStore.init()
   changelogStore.init()
+  userStore.checkIfShouldApplyAffiliatePromo()
 }
 
 onMounted(async () => {
@@ -722,7 +723,17 @@ const showMultipleSelectedActions = (event) => {
 
 // minimap
 
-const minimapIsVisible = computed(() => isPanningReady.value || isPanning.value)
+const minimapIsVisible = computed(() => {
+  if (globalStore.shouldExplicitlyHideFooter) { return }
+  return userStore.shouldShowMinimap || isPanningReady.value || isPanning.value
+})
+const minimapSize = computed(() => {
+  if (isPanningReady.value || isPanning.value) {
+    return 200
+  } else {
+    return 120
+  }
+})
 
 // resize dialog
 
@@ -754,7 +765,7 @@ const updateSidebarWidth = (event) => {
   }
   width = Math.max(width, consts.defaultDialogWidth)
   width = Math.min(width, viewportWidth)
-  userStore.updateUser({ sidebarResizeWidth: width })
+  userStore.updateUser({ sidebarResizeWidth: Math.round(width) })
 }
 
 // interactions
@@ -835,9 +846,10 @@ const initInteractions = (event) => {
   if (spaceIsReadOnly.value) { return }
   state.startCursor = utils.cursorPositionInViewport(event)
   updateCurrentInteractingItem()
+  globalStore.preventItemSnapping = false
 }
-const updateShouldSnapToGrid = (event) => {
-  let shouldSnap = (
+const updateshouldSnapAlign = (event) => {
+  const shouldSnap = (
     isDraggingCard.value ||
     isDraggingBox.value ||
     isDraggingList.value ||
@@ -845,22 +857,12 @@ const updateShouldSnapToGrid = (event) => {
     isResizingBox.value ||
     isResizingList.value
   )
-  shouldSnap = shouldSnap && event.shiftKey
-  // update snap guide line origin
-  if (!globalStore.shouldSnapToGrid && shouldSnap) {
-    const item = state.currentInteractingItem
-    globalStore.axisGuideLinesOrigin = {
-      x: item.x,
-      y: item.y
-    }
-  }
-  // should snap to grid
-  globalStore.shouldSnapToGrid = shouldSnap
+  globalStore.shouldSnapAlign = shouldSnap && event.shiftKey
 }
 const interact = (event) => {
   endCursor = utils.cursorPositionInViewport(event)
   endSpaceCursor = utils.cursorPositionInSpace(event)
-  updateShouldSnapToGrid(event)
+  updateshouldSnapAlign(event)
   if (isDraggingCard.value) {
     dragItems()
   } else if (isDraggingBox.value) {
@@ -939,6 +941,7 @@ const handleTouchEnd = (event) => {
   stopInteractions(event)
 }
 const resetGlobalStoreState = () => {
+  globalStore.itemSnapAlignGuides = {}
   globalStore.shouldSnapBackToList = false
   globalStore.currentUserIsPaintSelecting = false
   globalStore.currentUserIsPaintSelectingLocked = false
@@ -1002,7 +1005,7 @@ const stopInteractions = async (event) => {
   await nextTick()
   await nextTick()
   globalStore.clearShouldExplicitlyRenderCardIds()
-  globalStore.shouldSnapToGrid = false
+  globalStore.shouldSnapAlign = false
   // runs after child component interaction methods
   setTimeout(() => {
     listStore.triggerClearShouldPreventNextListInfoButton()
@@ -1138,7 +1141,7 @@ const updateMetaRSSFeed = () => {
     ScrollAtEdgesHandler
     NotificationsWithPosition(layer="space")
     BoxSelecting
-    AxisGuideLines
+    ItemSnapAlignGuideLines
   aside
     PaintSelectCanvas
     DrawingHandler
@@ -1149,7 +1152,7 @@ const updateMetaRSSFeed = () => {
   TagDetails
   UserDetails
   #space-minimap.minimap-canvas-wrap(v-if="minimapIsVisible")
-    MinimapCanvas(:visible="true" :size="200")
+    MinimapCanvas(:visible="true" :size="minimapSize" :preventAnimation="!(isPanning || isPanningReady)")
   //- handlers
   WindowHistoryHandler
   KeyboardShortcutsHandler
@@ -1180,7 +1183,7 @@ const updateMetaRSSFeed = () => {
 .minimap-canvas-wrap
   position fixed
   right 8px
-  bottom 50px
+  bottom 42px
 
 #box-backgrounds,
 #box-infos

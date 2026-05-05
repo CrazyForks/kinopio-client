@@ -67,6 +67,7 @@ const closeUpgradeFAQ = () => {
   state.upgradeFAQIsVisible = false
 }
 const studentDiscountIsAvailable = computed(() => userStore.studentDiscountIsAvailable)
+const affiliateDiscountIsAvailable = computed(() => userStore.affiliatePromoCode && !userStore.studentDiscountIsAvailable)
 const paymentProcessor = computed(() => {
   if (isSecureAppContextIOS.value) {
     return 'Apple'
@@ -98,7 +99,10 @@ const yearlyDiscount = computed(() => {
   const result = (numerator / denomenator) * 100
   return Math.round(result)
 })
-const lifetimePrice = computed(() => consts.price('life'))
+const lifetimePrice = computed(() => {
+  const isStudentDiscount = studentDiscountIsAvailable.value
+  return consts.price('life', isStudentDiscount)
+})
 const updatePeriod = (value) => {
   state.period = value
 }
@@ -122,6 +126,14 @@ const updateDialogHeight = async () => {
 const closeChildDialogs = () => {
   globalStore.triggerCloseChildDialogs()
 }
+
+// discount info
+
+const discountIsAvailableOnWeb = computed(() => {
+  const isStudentDiscount = studentDiscountIsAvailable.value && isSecureAppContextIOS.value
+  const isReferralDiscount = affiliateDiscountIsAvailable.value && isSecureAppContextIOS.value
+  return isStudentDiscount || isReferralDiscount
+})
 </script>
 
 <template lang="pug">
@@ -134,11 +146,12 @@ dialog.upgrade-user.wide(v-if="props.visible" :open="props.visible" @click.left.
           span ?
           UpgradeFAQ(:visible="state.upgradeFAQIsVisible")
 
-    //- student info
-    .row(v-if="studentDiscountIsAvailable && isSecureAppContextIOS")
-      .badge.danger Your account qualifies for a student discount but you have to upgrade via the web to use it
+    //- discount info
+    .row(v-if="discountIsAvailableOnWeb")
+      .badge.danger Your account qualifies for a student or promo discount but you have to upgrade via the web to use it
     .row(v-else-if="studentDiscountIsAvailable")
       .badge.success Your account qualifies for a student discount
+
     //- period picker
     .row
       .segmented-buttons

@@ -405,7 +405,7 @@ const closeCard = async () => {
   globalStore.shouldPreventNextEnterKey = false
   if (!item) { return }
   const cardHasName = Boolean(item.name)
-  const cardHasPendingUpload = uploadStore.hasPendingUploadForCardId(cardId)
+  const cardHasPendingUpload = uploadStore.getPendingUploadByItemId(cardId)
   if (!cardHasName && !cardHasPendingUpload) {
     cardStore.removeCard(cardId)
   }
@@ -1504,7 +1504,7 @@ dialog.card-details(v-if="visible" :open="visible" ref="dialogElement" @click.le
           ItemDetailsCheckboxButton(:cards="[card]" :isDisabled="!canEditCard")
           //- Image
           .button-wrap
-            button(@click.left.stop="toggleImagePickerIsVisible" :class="{active : state.imagePickerIsVisible}" title="Image")
+            button(@click.left.stop="toggleImagePickerIsVisible" :class="{active : state.imagePickerIsVisible}" title="Add or Upload Image")
               img.icon.flower(src="@/assets/flower.svg")
             ImagePicker(:visible="state.imagePickerIsVisible" :initialSearch="state.initialSearch" :cardUrl="url" :cardId="card.id" @selectImage="addImageOrFile")
           //- Toggle Style Actions
@@ -1610,7 +1610,7 @@ dialog.card-details(v-if="visible" :open="visible" ref="dialogElement" @click.le
         button(@click.left="triggerUpgradeUserIsVisible") Upgrade for Unlimited
       template(v-if="state.error.unknownUploadError")
         .badge.danger (シ_ _)シ Something went wrong, Please try again or contact support
-      ItemDetailsDebug(:item="card" :keys="['urlPreviewUrl', 'linkToSpaceId', 'y']")
+      ItemDetailsDebug(:item="card" :keys="['y', 'yDisplay']")
     CardDetailsResize
 </template>
 
