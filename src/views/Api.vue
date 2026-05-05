@@ -21,6 +21,30 @@ const userStore = useUserStore()
 const appsButtonElement = ref(null)
 let unsubscribes
 
+const state = reactive({
+  currentItems: []
+})
+
+let tableWrapObserver
+
+const observeTableWraps = () => {
+  tableWrapObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const sectionClass = Array.from(entry.target.classList).find(c => c !== 'table-wrap')
+      if (!sectionClass) return
+      const link = `#${sectionClass}`
+      if (entry.isIntersecting) {
+        if (!state.currentItems.includes(link)) {
+          state.currentItems.push(link)
+        }
+      } else {
+        state.currentItems = state.currentItems.filter(item => item !== link)
+      }
+    })
+  }, { threshold: 0.01 })
+  document.querySelectorAll('.table-wrap').forEach(el => tableWrapObserver.observe(el))
+}
+
 if (!consts.isStaticPrerenderingPage) {
   window.globalStore = useGlobalStore()
   window.themeStore = useThemeStore()
@@ -40,6 +64,11 @@ onMounted(() => {
   } else {
     document.title = 'Kinopio API Docs'
   }
+  nextTick(() => observeTableWraps())
+})
+
+onBeforeUnmount(() => {
+  tableWrapObserver?.disconnect()
 })
 
 const closeAllDialogs = () => {
@@ -91,7 +120,7 @@ AboutJsonLd
         ul.api-contents
           li(v-for="item in items")
             a(:href="item.link")
-              .badge.button-badge(:style="{ background: item.color }") {{item.name}}
+              .badge.button-badge(:style="{ background: item.color }" :class="{ active: state.currentItems.includes(item.link) }") {{item.name}}
         article.api
           //- img.cat(src="https://kinopio.club/help/assets/cat.png")
           ApiDocs
@@ -120,58 +149,52 @@ article.api
 
   h2
     font-size 18px
+  h3
+    font-size 16px
   h2,
   h3
     &.badge
       display inline-block
       padding 4px 5px
       padding-bottom 2px
-      // border-radius 5px
       font-family sans-serif
-      font-size 16px
       font-weight bold
       margin-bottom 0
-      // box-shadow none
-  // .badge.all
-  //   margin-top 0
 
-  // code
-  //   line-height 1.2
-
-  // colors should match api.pug
-  // .all,
-  // .users,
-  // .spaces,
-  // .cards,
-  // .connections,
-  // .connection-types,
-  // .boxes,
-  // .lists,
-  // .tags,
-  // .notifications,
-  // .other
-  //   color var(--primary)
-  //   padding 2px 5px
-  // .all
-  //   background khaki
-  // .users
-  //   background #b9a8ff
-  // .spaces
-  //   background pink
-  // .cards
-  //   background violet
-  // .connections
-  //   background salmon
-  // .boxes
-  //   background lightskyblue
-  // .lists
-  //   background #f9cb77
-  // .tags
-  //   background mediumaquamarine
-  // .notifications
-  //   background darkseagreen
-  // .other
-  //   background cadetblue
+    // TODO dark themes and programatic var colors
+    // .all,
+    // .users,
+    // .spaces,
+    // .cards,
+    // .connections,
+    // .connection-types,
+    // .boxes,
+    // .lists,
+    // .tags,
+    // .notifications,
+    // .other
+    //   color var(--primary)
+    //   padding 2px 5px
+    // .all
+    //   background khaki
+    // .users
+    //   background #b9a8ff
+    // .spaces
+    //   background pink
+    // .cards
+    //   background violet
+    // .connections
+    //   background salmon
+    // .boxes
+    //   background lightskyblue
+    // .lists
+    //   background #f9cb77
+    // .tags
+    //   background mediumaquamarine
+    // .notifications
+    //   background darkseagreen
+    // .other
+    //   background cadetblue
 
   .badge,
   code
@@ -202,16 +225,6 @@ article.api
     color var(--primary)
 
   .table-wrap
-    // &.all,
-    // &.users,
-    // &.spaces,
-    // &.cards,
-    // &.connections,
-    // &.boxes,
-    // &.lists,
-    // &.tags,
-    // &.notifications,
-    // &.other
     table
       background var(--primary-background)
       border-width 2px
