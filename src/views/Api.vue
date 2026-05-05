@@ -12,6 +12,8 @@ import FooterSitemap from '@/components/page/FooterSitemap.vue'
 import Footer from '@/components/page/Footer.vue'
 import consts from '@/consts.js'
 
+import ApiDocs from '@/data/apiDocs.md'
+
 const globalStore = useGlobalStore()
 const themeStore = useThemeStore()
 const userStore = useUserStore()
@@ -77,11 +79,13 @@ AboutJsonLd
         //-   span !{content}
         //-   script(src="/assets/js/api.js")
 
-        p [api docs]
+        article.api-docs
+          ApiDocs
 
       FooterSitemap
   Footer
 </template>
 
 <style lang="stylus">
+// article.api-docs
 </style>
