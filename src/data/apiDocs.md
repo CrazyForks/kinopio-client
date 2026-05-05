@@ -55,13 +55,13 @@ Method | Path | Description | Auth
 `GET`   | <code class="users">/user/favorite-spaces</code>        | Get favorite spaces for the authenticating user. Favorited spaces which have unread updates will have `isEdited: true`                      | `apiKey`
 `GET`   | <code class="users">/user/favorite-users</code>         | Get favorite users for the authenticating user                                                          | `apiKey`
 `GET`   | <code class="users">/user/favorite-colors</code>        | Get favorite colors for the authenticating user                                                         | `apiKey`
-`GET`   | <code class="users">/user/spaces</code>                 | Get a list of the user's <a href="#spaces" class="badge spaces">Spaces</a>. Use `/user/group-spaces` for spaces created by other members of groups they belong to           | `apiKey`
+`GET`   | <code class="users">/user/spaces</code>                 | Get a list of the user's <a href="#spaces" class="badge button-badge spaces">Spaces</a>. Use `/user/group-spaces` for spaces created by other members of groups they belong to           | `apiKey`
 `GET`   | <code class="users">/user/groups</code>                 | Get a list of the user's groups. Their role in each group (`member` or `admin`) is inside the `groupUser` object                                    | `apiKey`
-`GET`   | <code class="users">/user/group-spaces</code>           | Get a list of the user's group <a href="#spaces" class="badge spaces">Spaces</a> created by other members of groups they belong to                                          | `apiKey`
-`GET`   | <code class="users">/user/template-spaces</code>        | Get a list of the user's template <a href="#spaces" class="badge spaces">Spaces</a>. These include template spaces you made or are a collaborator in                        | `apiKey`
-`GET`   | <code class="users">/user/removed-spaces</code>         | Get <a href="#spaces" class="badge spaces">Spaces</a> removed by the authenticating user                                                                  | `apiKey`
+`GET`   | <code class="users">/user/group-spaces</code>           | Get a list of the user's group <a href="#spaces" class="badge button-badge spaces">Spaces</a> created by other members of groups they belong to                                          | `apiKey`
+`GET`   | <code class="users">/user/template-spaces</code>        | Get a list of the user's template <a href="#spaces" class="badge button-badge spaces">Spaces</a>. These include template spaces you made or are a collaborator in                        | `apiKey`
+`GET`   | <code class="users">/user/removed-spaces</code>         | Get <a href="#spaces" class="badge button-badge spaces">Spaces</a> removed by the authenticating user                                                                  | `apiKey`
 `GET`   | <code class="users">/user/inbox-space</code>            | Get info on the user's `Inbox` space. whether a space is an inbox or not is based on name only, so it's possible to have multiple `Inbox` spaces, but only one the most recently updated Inbox will be returned | `apiKey`
-`GET`   | <code class="users">/user/tags</code>                   | Get a list of the last edited <a href="#tags" class="badge tags">Tags</a> in your spaces                                                                  | `apiKey`
+`GET`   | <code class="users">/user/tags</code>                   | Get a list of the last edited <a href="#tags" class="badge button-badge tags">Tags</a> in your spaces                                                                  | `apiKey`
 `GET`   | <code class="users">/user/todos</code>                  | Get todo cards and boxes (item names start with `[]`, `[ ]`, or `[x]`), grouped by space                                                                            | `apiKey`
 `PATCH` | <code class="users">/user</code>                        | Update the authenticating user(s) based on an object body with user attributes. You can't patch `apiKey`, `password`, `emailIsVerified`, or `email`       | `apiKey`
 
@@ -157,7 +157,7 @@ Method | Path | Description | Auth
 `GET`    | <code class="spaces">/space/:spaceId/public-meta</code>    | Get public space info on non-private spaces                                                     | None
 `GET`    | <code class="spaces">/space/:spaceId/favorites</code>    | Get a list of users who have favorited the spaceId                                                | None
 `GET`    | <code class="spaces">/space/:spaceId/feed.json</code>    | `RSS feed` for cards recently created or updated in a space. Use `?apiKey=` for private spaces    | `canViewSpace`
-`GET`    | <code class="spaces">/space/:spaceId/<br>removedCards</code> | Get <a href="#cards" class="badge cards">Cards</a> removed in a space                         | `canEditSpace`
+`GET`    | <code class="spaces">/space/:spaceId/<br>removedCards</code> | Get <a href="#cards" class="badge button-badge cards">Cards</a> removed in a space                         | `canEditSpace`
 `GET`    | <code class="spaces">/space/explore-spaces</code>            | Get a list of recently updated public spaces which have been added to Explore. Sorted by date `showInExploreUpdatedAt` | None
 `GET`    | <code class="spaces">/space/explore-spaces/feed.json</code>  | `RSS feed` for new spaces added to Explore                                                    | None
 `GET`    | <code class="spaces">/space/live-spaces</code>           | Get a list of currently being edited spaces which are open or closed                              | None
@@ -188,11 +188,11 @@ Name | Type | Description
 <code class="spaces">backgroundIsGradient</code>  | `Boolean`  | Whether the space background uses `backgroundGradient` (instead of the default `background`)
 <code class="spaces">backgroundGradient</code>  | `Object`    | An array of gradient layer data that's used to build the space background gradient. The gradients are layered and animated using the technique described by [Shelby Wilson](https://shelby.cool/#/gradients)
 <code class="spaces">backgroundTint</code>      | `String`  | The background color used to tint the space background
-<code class="spaces">boxes</code>               | `Array`   | A list of <a href="#boxes" class="badge boxes">Boxes</a> in the space
-<code class="spaces">cards</code>               | `Array`   | A list of <a href="#cards" class="badge cards">Cards</a> in the space
+<code class="spaces">boxes</code>               | `Array`   | A list of <a href="#boxes" class="badge button-badge boxes">Boxes</a> in the space
+<code class="spaces">cards</code>               | `Array`   | A list of <a href="#cards" class="badge button-badge cards">Cards</a> in the space
 <code class="spaces">collaboratorKey</code>     | `String`  | Used like an apikey to allow editing, but just for that space. allows anonymous users who aren't signed in to edit a space. You can rotate this key, but you should still treat it as a secret
 <code class="spaces">collaborators</code>       | `Array`   | A list of users that can also edit the space
-<code class="spaces">connections</code>         | `Array`   | A list of <a href="#connections" class="badge connections">Connections</a>
+<code class="spaces">connections</code>         | `Array`   | A list of <a href="#connections" class="badge button-badge connections">Connections</a>
 <code class="spaces">createdAt</code>           | `String`  | The date when the space was created
 <code class="spaces">drawingImage</code>        | `String`  | The image url for drawings on the space. The image is regenerated on the server after each drawing stroke.
 <code class="spaces">editedAt</code>            | `String`  | The date when card contents in the space was last added or changed
@@ -204,7 +204,7 @@ Name | Type | Description
 <code class="spaces">isRestrictedByModerator</code> | `Boolean` | Whether the space has been marked as restricted. Restricted spaces are not shown in Explore, Live, or in the Everyone feed. This value cannot be patched, it is set manually by a moderator only when necessary.
 <code class="spaces">isTemplate</code>          | `Boolean` | Whether the space is a <a href="/posts/templates/">personal template</a>
 <code class="spaces">lines</code>                | `Array`   | A list of the Line dividers in the space
-<code class="spaces">lists</code>                | `Object`   | A list of the <a href="#lists" class="badge lists">Lists</a> in the space
+<code class="spaces">lists</code>                | `Object`   | A list of the <a href="#lists" class="badge button-badge lists">Lists</a> in the space
 <code class="spaces">moonPhase</code>           | `String`  | Name of the moonPhase icon representing when the space was created. Possible values are `new-moon`, `waxing-crescent`, `waxing-quarter`, `waxing-gibbous`, `full-moon`, `waning-gibbous`, `waning-quarter`, `waning-crescent`
 <code class="spaces">name</code>                | `String`  | The name of the space
 <code class="spaces">note</code>                | `String`  | The sidebar space note associated with the current user
@@ -219,7 +219,7 @@ Name | Type | Description
 <code class="spaces">url</code>                 | `String`  | The url of a space is determined by its `name` and `id`. For example, `kinopio.club/:space-name-:id`
 <code class="spaces">users</code>               | `Array`   | The user who created/owns the space (a space will always have only one user)
 <code class="spaces">showInExplore</code>       | `Boolean` | Whether the space is shown in explore
-<code class="spaces">tags</code>                | `Array`   | A list of <a href="#tags" class="badge tags">Tags</a>
+<code class="spaces">tags</code>                | `Array`   | A list of <a href="#tags" class="badge button-badge tags">Tags</a>
 <code class="spaces">group</code>                | `Object`   | Information on the group that a space belongs to (if any), including public metadata on the other group `users`
 <code class="spaces">groupId</code>              | `String` | The group id that the space belongs to. A space can only belong to one group.
 <code class="spaces">addedTogroupByUserId</code> | `String` | The user who added the space to the group
@@ -246,18 +246,18 @@ Method | Path | Description | Auth
 --- | --- | --- | ---
 `GET`     | <code class="cards">/card/:cardId</code>                | Get info on a card                                                                                                                                                                  | `canViewSpace`
 `GET`     | <code class="cards">/card/multiple?cardIds=id1,id2</code> | Get info on multiple cards, up to 60 cardIds at a time                                                                                                                    | `canViewSpace`
-`GET`     | <code class="cards">/card/by-tag-name/:tagName</code>   | Get all cards with tag matching tagName in your <a href="#spaces" class="badge spaces">Spaces</a>                                                                                   | `apiKey`
-`GET`     | <code class="cards">/card/by-link-to-space/:spaceId</code>   | Get the cards and <a href="#spaces" class="badge spaces">Spaces</a> where `linkToSpaceId` is `spaceId`. Will only return spaces that the user can view                         | `apiKey and canViewSpace`
+`GET`     | <code class="cards">/card/by-tag-name/:tagName</code>   | Get all cards with tag matching tagName in your <a href="#spaces" class="badge button-badge spaces">Spaces</a>                                                                                   | `apiKey`
+`GET`     | <code class="cards">/card/by-link-to-space/:spaceId</code>   | Get the cards and <a href="#spaces" class="badge button-badge spaces">Spaces</a> where `linkToSpaceId` is `spaceId`. Will only return spaces that the user can view                         | `apiKey and canViewSpace`
 `POST`    | <code class="cards">/card/search</code>                 | Get all cards that match a query. Body object must contain `query`. Only matches cards created by the user. Does not return removed cards, or cards from removed spaces. Searches are not case-insensitive                                       | `apiKey`
 `POST`    | <code class="cards">/card</code>                        | Create card from object in request body. Body object must contain `spaceId` and `name`. If not included, `x`, `y`, `z` will be positioned near the top left of the space, in a cascade pattern to prevent overlaps | `canEditSpace`
 `POST`    | <code class="cards">/card/to-inbox</code>               | Create card saved to the user's `Inbox` space from object in request body and . Body object must contain `name`. Will return `404` if the user does not already have an `Inbox` space. Positioning works just like `POST /card`        | `canEditSpace`
 `POST`    | <code class="cards">/card/multiple</code>               | Creates multiple cards from an array of objects in request body. Works just like `POST /card`                                                                                | `canEditSpace`
-`POST`    | <code class="cards">/card/list</code>                   | Add card to a <a href="#lists" class="badge lists">List</a> specified in request body. Body object must contain card `id`, and `listId`. If body object has `shouldPrepend: true`, the card will be added to the top of the list     | `canEditSpace`
+`POST`    | <code class="cards">/card/list</code>                   | Add card to a <a href="#lists" class="badge button-badge lists">List</a> specified in request body. Body object must contain card `id`, and `listId`. If body object has `shouldPrepend: true`, the card will be added to the top of the list     | `canEditSpace`
 `PATCH`   | <code class="cards">/card</code>                        | Update card from object in request body. Body object must contain `id`. `spaceId` cannot be patched                                                                          | `canEditSpace`
 `PATCH`   | <code class="cards">/card/multiple</code>               | Updates multiple cards from an array of objects in request body. Works just like `PATCH /card`                                                                               | `canEditSpace`
 `PATCH`   | <code class="cards">/card/update-counter</code>         | Increment or decrement a card counter for voting. Body object must contain `cardId`, and either `shouldIncrement: true` or `shouldDecrement: true`              | None
 `PATCH`   | <code class="cards">/card/restore</code>                | Restore removed card specified in body                                                                                                                                              | `canEditSpace`
-`DELETE`  | <code class="cards">/card/list</code>                   | Remove card from the <a href="#lists" class="badge lists">List</a> that it's in. Body object must contain card `id`. The card's position will be shifted to the right of the list.                                       | `canEditSpace`
+`DELETE`  | <code class="cards">/card/list</code>                   | Remove card from the <a href="#lists" class="badge button-badge lists">List</a> that it's in. Body object must contain card `id`. The card's position will be shifted to the right of the list.                                       | `canEditSpace`
 `DELETE`  | <code class="cards">/card</code>                        | Remove card specified in body                                                                                                                                                       | `canEditSpace`
 `DELETE`  | <code class="cards">/card/permanent</code>              | Permanently remove card specified in body                                                                                                                                           | `canEditSpace`
 
@@ -475,8 +475,8 @@ Routes with Auth `canEditSpace` requires that your Authorization apiKey belongs 
 
 Method | Path | Description | Auth
 --- | --- | --- | ---
-`GET`     | <code class="tags">/tags/:tagName</code>          | Get all tags with tagName in your <a href="#spaces" class="badge spaces">Spaces</a>                                                                      | `apiKey`
-`GET`     | <code class="tags">/tags/by-card/:cardId</code>   | Get all tags in a <a href="#cards" class="badge cards">Cards</a>                                                                                        | `apiKey`
+`GET`     | <code class="tags">/tags/:tagName</code>          | Get all tags with tagName in your <a href="#spaces" class="badge button-badge spaces">Spaces</a>                                                                      | `apiKey`
+`GET`     | <code class="tags">/tags/by-card/:cardId</code>   | Get all tags in a <a href="#cards" class="badge button-badge cards">Cards</a>                                                                                        | `apiKey`
 `PATCH`   | <code class="tags">/tags/color</code>             | Change the color of all tags with the name specified in request body. Object must contain `name`, `color`     | `apiKey`
 
 </div>
@@ -524,16 +524,16 @@ Method | Path | Description | Auth
 Name | Type | Description
 --- | --- | ---
 <code class="notifications">id</code>      | `String` | The unique ID of the notification. Is not user updateable
-<code class="notifications">card</code>    | `Object` | Basic information about the <a href="#cards" class="badge cards">Card</a> `id`, `name`
+<code class="notifications">card</code>    | `Object` | Basic information about the <a href="#cards" class="badge button-badge cards">Card</a> `id`, `name`
 <code class="notifications">cardId</code>  | `String` | The card that the notification involves
 <code class="notifications">createdAt</code>      | `String`  | The date when the notification was created
 <code class="notifications">isEmailed</code>  | `Boolean` | Has the notification been emailed to the recipient. Emails are only sent if `user.shouldEmailNotifications = true`
 <code class="notifications">isRead</code>  | `Boolean` | Has the notification been read by the recipient in Kinopio
 <code class="notifications">recipientUserId</code>   | `String` | The user that'll receive the notification
-<code class="notifications">space</code>   | `Object` | Basic information about the <a href="#spaces" class="badge spaces">Space</a> `id`, `name`, `privacy`, `background`
+<code class="notifications">space</code>   | `Object` | Basic information about the <a href="#spaces" class="badge button-badge spaces">Space</a> `id`, `name`, `privacy`, `background`
 <code class="notifications">spaceId</code> | `String` | The space that the notification involves
 <code class="notifications">type</code>    | `String` | The action that created the notification (e.g. `addCard`)
-<code class="notifications">user</code>    | `Object` | Basic information about the <a href="#users" class="badge users">User</a> `id`, `name`, `color`
+<code class="notifications">user</code>    | `Object` | Basic information about the <a href="#users" class="badge button-badge users">User</a> `id`, `name`, `color`
 <code class="notifications">userId</code>  | `String` | The user that created the notification
 <code class="notifications">updatedAt</code>      | `String`  | The date when any changes were made to the notification
 
