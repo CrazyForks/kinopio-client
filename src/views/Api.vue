@@ -56,6 +56,21 @@ const logSystemThemeChange = (event) => {
 const updateSystemTheme = () => {
   themeStore.updateSystemTheme()
 }
+
+// toc
+
+const items = computed(() => [
+  { name: 'All', link: '#all', color: 'khaki' },
+  { name: 'Users', link: '#users', color: '#b9a8ff' },
+  { name: 'Spaces', link: '#spaces', color: 'pink' },
+  { name: 'Cards', link: '#cards', color: 'violet' },
+  { name: 'Connections', link: '#connections', color: 'salmon' },
+  { name: 'Boxes', link: '#boxes', color: 'lightskyblue' },
+  { name: 'Lists', link: '#lists', color: '#f9cb77' },
+  { name: 'Tags', link: '#tags', color: 'mediumaquamarine' },
+  { name: 'Notifications', link: '#notifications', color: 'darkseagreen' },
+  { name: 'Other', link: '#other', color: 'cadetblue' }
+])
 </script>
 
 <template lang="pug">
@@ -67,20 +82,13 @@ AboutJsonLd
       section.intro
         Wordmark
         h2 API Documentation
+        ul.api-contents
+          li(v-for="item in items")
+            a(:href="item.link")
+              .badge(:style="{ background: item.color }") {{item.name}}
 
-        //- - items = [ {name: 'All', link: '#all', color: 'khaki'}, {name: 'Users', link: '#users', color: '#b9a8ff'}, {name: 'Spaces', link: '#spaces', color: 'pink'}, {name: 'Cards', link: '#cards', color: 'violet'}, {name: 'Connections', link: '#connections', color: 'salmon'}, {name: 'Boxes', link: '#boxes', color: 'lightskyblue'}, {name: 'Lists', link: '#lists', color: '#f9cb77'}, {name: 'Tags', link: '#tags', color: 'mediumaquamarine'}, {name: 'Notifications', link: '#notifications', color: 'darkseagreen'}, {name: 'Other', link: '#other', color: 'cadetblue'} ]
-        //- ul.api-contents
-        //-   each item in items
-        //-     li
-        //-       a(href=item.link style=`background: ${item.color}`)
-        //-         span #{item.name}
-
-        //- article.api
-        //-   span !{content}
-        //-   script(src="/assets/js/api.js")
-
-        article.api-docs
-          //- <!-- <img src="/assets/cat.png" class="cat no-shadow"/> -->
+        article.api
+          //- img.cat(src="https://kinopio.club/help/assets/cat.png")
           ApiDocs
 
       FooterSitemap
@@ -88,5 +96,7 @@ AboutJsonLd
 </template>
 
 <style lang="stylus">
-// article.api-docs
+// article.api
+//   .cat
+//     width 100px
 </style>
