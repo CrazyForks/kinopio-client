@@ -6,6 +6,7 @@ import { useThemeStore } from '@/stores/useThemeStore'
 import { useUserStore } from '@/stores/useUserStore'
 
 import AboutJsonLd from '@/components/page/about/AboutJsonLd.vue'
+import Wordmark from '@/components/page/Wordmark.vue'
 import Header from '@/components/page/Header.vue'
 import AboutSocialProof from '@/components/page/about/AboutSocialProof.vue'
 import AboutHowTo from '@/components/page/about/AboutHowTo.vue'
@@ -69,7 +70,7 @@ AboutJsonLd
   main.page(@click="closeAllDialogs")
     .page-wrap
       section.intro
-        h1.wordmark Kinopio
+        Wordmark
         p Spatial Thinking for Mindmaps, Moodboards, Whiteboards, Research, and Notes.
         video(
           autoplay
@@ -158,11 +159,6 @@ main.page
       width 100%
       margin-bottom 2rem
       padding 0 20px
-      > h1
-        font-family var(--header-font-9)
-        font-size 66px
-        margin-block initial
-        margin-bottom 1rem
       > h2
         font-size 21px
         max-width 400px
