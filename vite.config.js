@@ -39,6 +39,23 @@ const createCache = (name, pattern) => {
   }
 }
 
+const serveApiMdPlugin = () => {
+  const src = path.resolve(__dirname, 'src/data/apiDocs.md')
+  return {
+    name: 'serve-api-md',
+    configureServer (server) {
+      server.middlewares.use('/api.md', (req, res) => {
+        res.setHeader('Content-Type', 'text/markdown; charset=utf-8')
+        res.end(fs.readFileSync(src))
+      })
+    },
+    closeBundle () {
+      fs.copyFileSync(src, path.resolve(__dirname, 'dist/api.md'))
+      console.log('✓ Copied api.md to dist/')
+    }
+  }
+}
+
 // Custom plugin to create SPA version of app.html
 const createSPAPlugin = () => {
   return {
@@ -104,6 +121,8 @@ export default defineConfig(async ({ command, mode }) => {
       }),
       // Create SPA version of app.html
       createSPAPlugin(),
+      // Serve raw API docs markdown at /api.md
+      serveApiMdPlugin(),
       // offline support
       VitePWA({
         registerType: 'autoUpdate',

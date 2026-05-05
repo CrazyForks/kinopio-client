@@ -1,5 +1,3 @@
-<!-- <img src="/assets/cat.png" class="cat no-shadow"/> -->
-
 The Kinopio API is used to find, save, and update the spaces of signed up users. You can use it to make cool things too.
 
 Use of the API is subject to the [Use Restrictions Policy](/posts/use-restrictions-policy/).

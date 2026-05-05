@@ -80,6 +80,7 @@ AboutJsonLd
         //-   script(src="/assets/js/api.js")
 
         article.api-docs
+          //- <!-- <img src="/assets/cat.png" class="cat no-shadow"/> -->
           ApiDocs
 
       FooterSitemap
