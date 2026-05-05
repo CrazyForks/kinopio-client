@@ -255,6 +255,9 @@ dialog.share.wide(v-if="props.visible" :open="props.visible" @click.left.stop="c
             input(type="checkbox" :value="state.isShareInPresentationMode")
             img.icon(src="@/assets/presentation.svg")
 
+  //- Invite
+  InviteToSpace(:visible="isSpaceMember && currentUserIsSignedIn" @closeDialogs="closeDialogs" :group="spaceGroup" @childDialogIsVisible="childDialogIsVisible")
+
   //- Group
   section
     .button-wrap
@@ -264,9 +267,6 @@ dialog.share.wide(v-if="props.visible" :open="props.visible" @click.left.stop="c
         template(v-else)
           span Add to Group
       AddToGroup(:visible="state.addToGroupIsVisible" @selectGroup="toggleSpaceGroup" :groups="userGroups" :selectedGroup="spaceGroup" @closeDialogs="closeDialogs")
-
-  //- Invite
-  InviteToSpace(:visible="isSpaceMember && currentUserIsSignedIn" @closeDialogs="closeDialogs" :group="spaceGroup" @childDialogIsVisible="childDialogIsVisible")
 
   section(v-if="!spaceIsRemote")
     p

@@ -21,7 +21,7 @@ const resetStoresForStaticPage = () => {
   useListStore().$reset()
 }
 
-const affiliatePromoCodes = ['foxy']
+const affiliatePromoCodes = ['foxy', 'phonetonote']
 const aboutPaths = ['/about', '/from/:promoCode', '/from']
 
 const router = {
