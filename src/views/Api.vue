@@ -11,6 +11,7 @@ import Wordmark from '@/components/page/Wordmark.vue'
 import FooterSitemap from '@/components/page/FooterSitemap.vue'
 import Footer from '@/components/page/Footer.vue'
 import consts from '@/consts.js'
+import utils from '@/utils.js'
 
 import ApiDocs from '@/data/apiDocs.md'
 
@@ -89,23 +90,63 @@ const updateSystemTheme = () => {
 // toc
 
 const items = computed(() => {
-  // TODO dark themes and programatic var colors
-  const sections = [
-    { name: 'All', color: 'khaki' },
-    { name: 'Users', color: '#b9a8ff' },
-    { name: 'Spaces', color: 'pink' },
-    { name: 'Cards', color: 'violet' },
-    { name: 'Connections', color: 'salmon' },
-    { name: 'Boxes', color: 'lightskyblue' },
-    { name: 'Lists', color: '#f9cb77' },
-    { name: 'Tags', color: 'mediumaquamarine' },
-    { name: 'Notifications', color: 'darkseagreen' },
-    { name: 'Other', color: 'cadetblue' }
+  let items = [
+    {
+      name: 'All',
+      lightThemeColor: 'khaki',
+      darkThemeColor: 'red'
+    }, {
+      name: 'Users',
+      lightThemeColor: '#b9a8ff',
+      darkThemeColor: 'red'
+    }, {
+      name: 'Spaces',
+      lightThemeColor: 'pink',
+      darkThemeColor: 'red'
+    }, {
+      name: 'Cards',
+      lightThemeColor: 'violet',
+      darkThemeColor: 'red'
+    }, {
+      name: 'Connections',
+      lightThemeColor: 'salmon',
+      darkThemeColor: 'red'
+    }, {
+      name: 'Boxes',
+      lightThemeColor: 'lightskyblue',
+      darkThemeColor: 'red'
+    }, {
+      name: 'Lists',
+      lightThemeColor: '#f9cb77',
+      darkThemeColor: 'red'
+    }, {
+      name: 'Tags',
+      lightThemeColor: 'mediumaquamarine',
+      darkThemeColor: 'red'
+    }, {
+      name: 'Notifications',
+      lightThemeColor: 'darkseagreen',
+      darkThemeColor: 'red'
+    }, {
+      name: 'Other',
+      lightThemeColor: 'cadetblue',
+      darkThemeColor: 'red'
+    }
   ]
-  return sections.map(item => {
-    item.link = `#${item.name.toLowerCase()}`
+  items = items.map(item => {
+    const name = item.name.toLowerCase()
+    // anchor link
+    item.link = `#${name}`
+    // color
+    if (isThemeDark.value) {
+      item.color = item.darkThemeColor
+    } else {
+      item.color = item.lightThemeColor
+    }
+    utils.setCssVariable(`api-badge-${name}`, item.color)
     return item
   })
+  return items
 })
 </script>
 
@@ -149,7 +190,6 @@ main.api-page-wrap
       padding-top 100px // offset anchor link
       margin-top -100px
       display block
-
     h2
       font-size 18px
     h3
@@ -164,37 +204,34 @@ main.api-page-wrap
         font-weight bold
         margin-bottom 0
 
-    // TODO dark themes and programatic var colors
-
   code
     background var(--secondary-background)
     margin-right 0
-
   .badge,
   code
     color var(--primary)
     vertical-align 0
     position static
     &.all
-      background khaki
+      background var(--api-badge-all)
     &.users
-      background #b9a8ff
+      background var(--api-badge-users)
     &.spaces
-      background pink
+      background var(--api-badge-spaces)
     &.cards
-      background violet
+      background var(--api-badge-cards)
     &.connections
-      background salmon
+      background var(--api-badge-connections)
     &.boxes
-      background lightskyblue
+      background var(--api-badge-boxes)
     &.lists
-      background #f9cb77
+      background var(--api-badge-lists)
     &.tags
-      background mediumaquamarine
+      background var(--api-badge-tags)
     &.notifications
-      background darkseagreen
+      background var(--api-badge-notifications)
     &.other
-      background cadetblue
+      background var(--api-badge-other)
   a.badge
     text-decoration none
     color var(--primary)
@@ -202,34 +239,34 @@ main.api-page-wrap
   .table-wrap
     &.all
       table
-        border-color khaki
+        border-color var(--api-badge-all)
     &.users
       table
-        border-color #b9a8ff
+        border-color var(--api-badge-users)
     &.spaces
       table
-        border-color pink
+        border-color var(--api-badge-spaces)
     &.cards
       table
-        border-color violet
+        border-color var(--api-badge-cards)
     &.connections
       table
-        border-color salmon
+        border-color var(--api-badge-connections)
     &.boxes
       table
-        border-color lightskyblue
+        border-color var(--api-badge-boxes)
     &.lists
       table
-        border-color #f9cb77
+        border-color var(--api-badge-lists)
     &.tags
       table
-        border-color mediumaquamarine
+        border-color var(--api-badge-tags)
     &.notifications
       table
-        border-color darkseagreen
+        border-color var(--api-badge-notifications)
     &.other
       table
-        border-color cadetblue
+        border-color var(--api-badge-other)
 
   table
     background var(--primary-background)
@@ -247,6 +284,8 @@ main.api-page-wrap
     tr
       &:hover
         background var(--secondary-hover-background)
+
+  // custom column widths
 
   .routes-table-wrap
     th
