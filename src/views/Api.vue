@@ -93,56 +93,39 @@ const items = computed(() => {
   let items = [
     {
       name: 'All',
-      lightThemeColor: 'khaki',
-      darkThemeColor: 'red'
+      color: 'khaki'
     }, {
       name: 'Users',
-      lightThemeColor: '#b9a8ff',
-      darkThemeColor: 'red'
+      color: '#b9a8ff'
     }, {
       name: 'Spaces',
-      lightThemeColor: 'pink',
-      darkThemeColor: 'red'
+      color: 'pink'
     }, {
       name: 'Cards',
-      lightThemeColor: 'violet',
-      darkThemeColor: 'red'
+      color: 'violet'
     }, {
       name: 'Connections',
-      lightThemeColor: 'salmon',
-      darkThemeColor: 'red'
+      color: 'salmon'
     }, {
       name: 'Boxes',
-      lightThemeColor: 'lightskyblue',
-      darkThemeColor: 'red'
+      color: 'lightskyblue'
     }, {
       name: 'Lists',
-      lightThemeColor: '#f9cb77',
-      darkThemeColor: 'red'
+      color: '#f9cb77'
     }, {
       name: 'Tags',
-      lightThemeColor: 'mediumaquamarine',
-      darkThemeColor: 'red'
+      color: 'mediumaquamarine'
     }, {
       name: 'Notifications',
-      lightThemeColor: 'darkseagreen',
-      darkThemeColor: 'red'
+      color: 'darkseagreen'
     }, {
       name: 'Other',
-      lightThemeColor: 'cadetblue',
-      darkThemeColor: 'red'
+      color: 'cadetblue'
     }
   ]
   items = items.map(item => {
     const name = item.name.toLowerCase()
-    // anchor link
     item.link = `#${name}`
-    // color
-    if (isThemeDark.value) {
-      item.color = item.darkThemeColor
-    } else {
-      item.color = item.lightThemeColor
-    }
     utils.setCssVariable(`api-badge-${name}`, item.color)
     return item
   })
@@ -184,6 +167,8 @@ main.api-page-wrap
       display inline-block
       a
         text-decoration none
+      .badge
+        color var(--primary-on-light-background)
 
   article.api-docs
     .anchor
@@ -207,30 +192,40 @@ main.api-page-wrap
   code
     background var(--secondary-background)
     margin-right 0
+
   .badge,
   code
-    color var(--primary)
     vertical-align 0
     position static
     &.all
+      color var(--primary-on-light-background)
       background var(--api-badge-all)
     &.users
+      color var(--primary-on-light-background)
       background var(--api-badge-users)
     &.spaces
+      color var(--primary-on-light-background)
       background var(--api-badge-spaces)
     &.cards
+      color var(--primary-on-light-background)
       background var(--api-badge-cards)
     &.connections
+      color var(--primary-on-light-background)
       background var(--api-badge-connections)
     &.boxes
+      color var(--primary-on-light-background)
       background var(--api-badge-boxes)
     &.lists
+      color var(--primary-on-light-background)
       background var(--api-badge-lists)
     &.tags
+      color var(--primary-on-light-background)
       background var(--api-badge-tags)
     &.notifications
+      color var(--primary-on-light-background)
       background var(--api-badge-notifications)
     &.other
+      color var(--primary-on-light-background)
       background var(--api-badge-other)
   a.badge
     text-decoration none
