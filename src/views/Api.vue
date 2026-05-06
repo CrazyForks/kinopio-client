@@ -289,10 +289,18 @@ main.api-page-wrap
   // custom column widths
 
   .routes-table-wrap
+    table
+      box-shadow var(--active-shadow)
     th
       // method
       &:nth-child(1)
         width 70px
+      // path
+      &:nth-child(2)
+        @media(max-width 850px)
+          width 250px
+        @media(max-width 750px)
+          width initial
       // auth
       &:nth-child(4)
         width 120px

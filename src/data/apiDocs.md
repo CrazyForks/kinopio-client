@@ -480,7 +480,7 @@ Each tag you add to a card is considered a seperate entity. So if you have two c
 
 Routes with Auth `canEditSpace` requires that your Authorization apiKey belongs to a user with the permission to edit the space that the tag belongs to.
 
-<div class="table-wrap tags">
+<div class="table-wrap tags routes-table-wrap">
 
 Method | Path | Description | Auth
 --- | --- | --- | ---
@@ -520,7 +520,7 @@ Notifications are created when another user adds a card in a space that you're a
 
 Routes with Auth as `apiKey` mean that the Authorization header apiKey must match the requested user.
 
-<div class="table-wrap notifications">
+<div class="table-wrap notifications routes-table-wrap">
 
 Method | Path | Description | Auth
 --- | --- | --- | ---
