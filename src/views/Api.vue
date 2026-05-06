@@ -113,8 +113,8 @@ const items = computed(() => {
 AboutJsonLd
 .page(:class="{ 'is-dark-theme': isThemeDark }")
   Header(:isDocumentPage="true")
-  main.page(@click="closeAllDialogs")
-    .page-wrap.api-page-wrap
+  main.page.api-page-wrap(@click="closeAllDialogs")
+    .page-wrap
       section.intro
         Wordmark
         h2.page-title API DOCS
@@ -123,7 +123,6 @@ AboutJsonLd
             a(:href="item.link")
               .badge.button-badge(:style="{ background: item.color }" :class="{ active: state.currentItems.includes(item.link) }") {{item.name}}
         article.api-docs
-          //- img.cat(src="https://kinopio.club/help/assets/cat.png")
           ApiDocs
 
       FooterSitemap
@@ -131,40 +130,39 @@ AboutJsonLd
 </template>
 
 <style lang="stylus">
-.api-page-wrap
-  max-width 1000px
+main.api-page-wrap
   p
     max-width 440px // same as page.styl
-ul.api-toc
-  padding 0
-  position sticky
-  top 45px
-  z-index 10
-  li
-    list-style none
-    display inline-block
-    a
-      text-decoration none
-
-article.api-docs
-  .anchor
-    padding-top 100px // offset anchor link
-    margin-top -100px
-    display block
-
-  h2
-    font-size 18px
-  h3
-    font-size 16px
-  h2,
-  h3
-    &.badge
+  ul.api-toc
+    padding 0
+    position sticky
+    top 45px
+    // z-index 1
+    li
+      list-style none
       display inline-block
-      padding 4px 5px
-      padding-bottom 2px
-      font-family sans-serif
-      font-weight bold
-      margin-bottom 0
+      a
+        text-decoration none
+
+  article.api-docs
+    .anchor
+      padding-top 100px // offset anchor link
+      margin-top -100px
+      display block
+
+    h2
+      font-size 18px
+    h3
+      font-size 16px
+    h2,
+    h3
+      &.badge
+        display inline-block
+        padding 4px 5px
+        padding-bottom 2px
+        font-family sans-serif
+        font-weight bold
+        margin-bottom 0
 
     // TODO dark themes and programatic var colors
 
@@ -175,7 +173,8 @@ article.api-docs
   .badge,
   code
     color var(--primary)
-    // padding 2px 5px
+    vertical-align 0
+    position static
     &.all
       background khaki
     &.users
