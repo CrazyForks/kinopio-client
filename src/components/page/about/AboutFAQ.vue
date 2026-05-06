@@ -70,7 +70,7 @@ section.faq
         a(href="https://jsoncanvas.org/") JSON Canvas
         span {{' '}}files, and you can download a backup of all your spaces together.
       p There is also a comprehensive{{' '}}
-        a(href="/help/api") public API
+        a(href="/api") public API
         span {{' '}} so that you can build your own custom integrations and tooling.
       p And if you'd like, you can{{' '}}
         a(href="/help/posts/delete-your-account/") delete your account

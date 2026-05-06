@@ -6,6 +6,7 @@ import { useThemeStore } from '@/stores/useThemeStore'
 import { useUserStore } from '@/stores/useUserStore'
 
 import AboutJsonLd from '@/components/page/about/AboutJsonLd.vue'
+import Wordmark from '@/components/page/Wordmark.vue'
 import Header from '@/components/page/Header.vue'
 import AboutSocialProof from '@/components/page/about/AboutSocialProof.vue'
 import AboutHowTo from '@/components/page/about/AboutHowTo.vue'
@@ -65,11 +66,11 @@ const updateSystemTheme = () => {
 <template lang="pug">
 AboutJsonLd
 .page(:class="{ 'is-dark-theme': isThemeDark }")
-  Header
+  Header(:isDocumentPage="true")
   main.page(@click="closeAllDialogs")
     .page-wrap
       section.intro
-        h1.wordmark Kinopio
+        Wordmark
         p Spatial Thinking for Mindmaps, Moodboards, Whiteboards, Research, and Notes.
         video(
           autoplay
@@ -134,72 +135,5 @@ AboutJsonLd
 </template>
 
 <style lang="stylus">
-:root
-  --page-entity-radius 16px
-
-header
-  z-index 1
-
-main.page
-  user-select text
-  padding-top 6rem
-  padding-bottom 4rem
-  margin 0
-  color var(--primary)
-  background-color var(--primary-background)
-  .page-wrap
-    margin-left auto
-    margin-right auto
-    max-width 755px
-    @media(max-width 760px)
-      max-width 600px
-
-    > section
-      width 100%
-      margin-bottom 2rem
-      padding 0 20px
-      > h1
-        font-family var(--header-font-9)
-        font-size 66px
-        margin-block initial
-        margin-bottom 1rem
-      > h2
-        font-size 21px
-        max-width 400px
-      > img
-        margin-bottom 1rem
-        border-radius var(--page-entity-radius)
-      > p
-        margin 1rem 0
-        max-width 440px
-        &:last-child
-          margin-bottom 0
-      a
-        color var(--text-link)
-        &:hover
-          text-decoration none
-      video
-        max-width 100%
-        height auto
-      details + details
-        margin-top 5px
-
-    > section.intro
-      video
-        border-radius calc(var(--entity-radius) * 2)
-
-    .signature
-      width 70px
-      margin 0
-
-.notifications-wrap
-  position fixed
-  left 0
-  right 0
-  bottom 40px
-  padding 8px
-  max-width 100%
-  pointer-events none
-  transform-origin left bottom
-  margin-bottom env(safe-area-inset-bottom)
+// page.styl
 </style>

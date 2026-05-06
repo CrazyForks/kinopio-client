@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import Markdown from 'unplugin-vue-markdown/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import Sitemap from 'vite-plugin-sitemap'
 import path from 'path'
@@ -74,7 +75,7 @@ export default defineConfig(async ({ command, mode }) => {
     ssgOptions: {
       entry: 'src/main.js',
       includedRoutes (paths, routes) {
-        return ['/', '/about']
+        return ['/', '/about', '/api']
       }
     },
     test: {
@@ -94,8 +95,12 @@ export default defineConfig(async ({ command, mode }) => {
     plugins: [
       // .vue support
       vue({
+        include: [/\.vue$/, /\.md$/],
         // Disable SSR warnings
         ssr: false
+      }),
+      Markdown({
+        markdownItOptions: { html: true }
       }),
       // Create SPA version of app.html
       createSPAPlugin(),
