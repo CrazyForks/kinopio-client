@@ -18,7 +18,6 @@ import postMessage from '@/postMessage.js'
 import randomColor from 'randomcolor'
 import { nanoid } from 'nanoid'
 import dayjs from 'dayjs'
-import { v4 as uuidv4 } from 'uuid' // polyfill for self.crypto.randomUUID(), for legacy todesktop support, 2014
 import uniqBy from 'lodash-es/uniqBy'
 
 export const useUserStore = defineStore('user', {
@@ -303,7 +302,7 @@ export const useUserStore = defineStore('user', {
     async createNewUser () {
       console.info('🌸 Create new user')
       this.themeIsSystem = true
-      this.appleAppAccountToken = uuidv4()
+      this.appleAppAccountToken = self.crypto.randomUUID()
       const allState = { ...this.$state }
       cache.saveUser(allState)
     },

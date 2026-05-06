@@ -17,7 +17,6 @@ import inboxSpace from '@/data/inbox.json'
 import helloSpace from '@/data/hello.json'
 
 import { nanoid } from 'nanoid'
-import { v4 as uuidv4 } from 'uuid' // polyfill for self.crypto.randomUUID(), for legacy todesktop suppor
 
 const globalStore = useGlobalStore()
 const userStore = useUserStore()
@@ -185,7 +184,7 @@ const isSignUpPasswordTooShort = (password) => {
 const migrationAppleAppAccountToken = () => {
   const appleToken = userStore.appleAppAccountToken
   if (!appleToken) {
-    userStore.appleAppAccountToken = uuidv4()
+    userStore.appleAppAccountToken = self.crypto.randomUUID()
   }
 }
 const signUp = async (event) => {
