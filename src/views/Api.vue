@@ -31,19 +31,17 @@ let tableWrapObserver
 const observeTableWraps = () => {
   tableWrapObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      const sectionClass = Array.from(entry.target.classList).find(c => c !== 'table-wrap')
+      console.log(entry)
+      const sectionClass = Array.from(entry.target.classList).find(className => className !== 'section-wrap')
       if (!sectionClass) return
-      const link = `#${sectionClass}`
       if (entry.isIntersecting) {
-        if (!state.currentItems.includes(link)) {
-          state.currentItems.push(link)
-        }
+        state.currentItems.push(sectionClass)
       } else {
-        state.currentItems = state.currentItems.filter(item => item !== link)
+        state.currentItems = state.currentItems.filter(item => item !== sectionClass)
       }
     })
   }, { threshold: 0.01 })
-  document.querySelectorAll('.table-wrap').forEach(el => tableWrapObserver.observe(el))
+  document.querySelectorAll('.section-wrap').forEach(element => tableWrapObserver.observe(element))
 }
 
 if (!consts.isStaticPrerenderingPage) {
@@ -145,7 +143,7 @@ AboutJsonLd
         ul.api-toc
           li(v-for="item in items")
             a(:href="item.link")
-              .badge.button-badge(:style="{ background: item.color }" :class="{ active: state.currentItems.includes(item.link) }") {{item.name}}
+              .badge.button-badge(:style="{ background: item.color }" :class="{ active: state.currentItems.includes(item.name.toLowerCase()) }") {{item.name}}
         article.api-docs
           ApiDocs
 
@@ -155,6 +153,8 @@ AboutJsonLd
 
 <style lang="stylus">
 main.api-page-wrap
+  .page-wrap
+    max-width 900px
   p
     max-width 440px // same as page.styl
   ul.api-toc
@@ -174,6 +174,7 @@ main.api-page-wrap
 
   article.api-docs
     margin-bottom 3rem
+    max-width 1000px
     p:has(.anchor)
       pointer-events none
     .anchor

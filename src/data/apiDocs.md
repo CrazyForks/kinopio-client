@@ -16,6 +16,7 @@ The API is limited to 5 requests per second. If you exceed this rate, you will r
 
 ## Routes and Attributes by Item Type
 
+<section class="section-wrap all">
 <h2 class="badge all">All</h2>
 <a class="anchor" name="all"></a>
 
@@ -28,9 +29,10 @@ Method | Name | Description | Auth
 `GET` | <code class="all">/</code> | Confirm that the API server is online | None
 
 </div>
+</section>
 
 
-
+<section class="section-wrap users">
 <a class="anchor" data-section="👯‍♀️" name="users"></a>
 <h2 class="badge users">Users</h2>
 
@@ -132,9 +134,9 @@ Name | Type | Description
 <code class="users">shouldShowMinimap</code>                | `Boolean` | Whether the bottom-right minimap is persistently visible
 
 </div>
+</section>
 
-
-
+<section class="section-wrap spaces">
 <a class="anchor" data-section="🍓" name="spaces"></a>
 <h2 class="badge spaces">Spaces</h2>
 
@@ -225,9 +227,11 @@ Name | Type | Description
 <code class="spaces">readOnlyKey</code>         | `String`  | Similar to `collaboratorKey` but only allows users and non-signed-in users to read a private space
 
 </div>
+</section>
 
 
 
+<section class="section-wrap cards">
 <a class="anchor" data-section="🎑" name="cards"></a>
 <h2 class="badge cards">Cards</h2>
 
@@ -312,9 +316,11 @@ Name | Type | Description
 <code class="cards">z</code>                        | `Integer` | The z-axis position
 
 </div>
+</section>
 
 
 
+<section class="section-wrap connections">
 <a class="anchor" data-section="🍆" name="connections"></a>
 <h2 class="badge connections">Connections</h2>
 
@@ -359,9 +365,11 @@ Name | Type | Description
 <code class="connections">updatedAt</code>         | `String`  | The date when any changes to the connection were made
 
 </div>
+</section>
 
 
 
+<section class="section-wrap boxes">
 <a class="anchor" data-section="🍱" name="boxes"></a>
 <h2 class="badge boxes">Boxes</h2>
 
@@ -411,9 +419,11 @@ Name | Type | Description
 <code class="boxes">z</code>              | `Integer` | The z-axis position
 
 </div>
+</section>
 
 
 
+<section class="section-wrap lists">
 <a class="anchor" data-section="🍱" name="lists"></a>
 <h2 class="badge lists">Lists</h2>
 
@@ -456,9 +466,11 @@ Name | Type | Description
 <code class="lists">z</code>                                          | `Integer` | The z-axis position
 
 </div>
+</section>
 
 
 
+<section class="section-wrap tags">
 <a class="anchor" data-section="🦚" name="tags"></a>
 <h2 class="badge tags">Tags</h2>
 
@@ -480,7 +492,7 @@ Method | Path | Description | Auth
 
 <h3 class="badge tags">Tags Attributes</h3>
 
-<div class="table-wrap lists attributes-table-wrap">
+<div class="table-wrap tags attributes-table-wrap">
 
 Name | Type | Description
 --- | --- | ---
@@ -494,9 +506,11 @@ Name | Type | Description
 <code class="tags">userId</code> | `String` | The user who created the tag
 
 </div>
+</section>
 
 
 
+<section class="section-wrap notifications">
 <a class="anchor" data-section="🛎" name="notifications"></a>
 <h2 class="badge notifications">Notifications</h2>
 
@@ -535,9 +549,10 @@ Name | Type | Description
 <code class="notifications">updatedAt</code>      | `String`  | The date when any changes were made to the notification
 
 </div>
+</section>
 
 
-
+<section class="section-wrap other">
 <a class="anchor" data-section="🛎" name="other"></a>
 <h2 class="badge other">Other</h2>
 
@@ -557,3 +572,4 @@ Method | Path | Description | Auth
 `GET`   | <code class="other">/meta/random-name</code>  | returns a random word space name – based on the logic formerly used to generate space names | None
 
 </div>
+</section>
