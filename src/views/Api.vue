@@ -289,8 +289,6 @@ main.api-page-wrap
   // custom column widths
 
   .routes-table-wrap
-    table
-      box-shadow var(--active-shadow)
     th
       // method
       &:nth-child(1)
