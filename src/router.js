@@ -22,7 +22,7 @@ const resetStoresForStaticPage = () => {
 }
 
 const affiliatePromoCodes = ['foxy', 'phonetonote']
-const aboutPaths = ['/about', '/from/:promoCode', '/from']
+const aboutPaths = ['/about', '/from']
 
 const router = {
   history: consts.isStaticPrerenderingPage ? createMemoryHistory() : createWebHistory(import.meta.env.BASE_URL),
@@ -53,15 +53,23 @@ const router = {
         next()
       }
     }, {
+      path: '/from/:promoCode',
+      redirect: to => ({
+        path: '/',
+        query: { promoCode: to.params.promoCode }
+      })
+    }, {
       path: '/',
       alias: aboutPaths,
       name: 'about',
       component: () => import('./views/About.vue'),
       beforeEnter: (to, from, next) => {
         const globalStore = useGlobalStore()
+        const userStore = useUserStore()
         resetStoresForStaticPage()
-        const promoCode = to.params.promoCode
-        if (affiliatePromoCodes.includes(promoCode)) {
+        const promoCode = to.query.promoCode
+        const isPromoCodeValid = affiliatePromoCodes.includes(promoCode)
+        if (isPromoCodeValid && !userStore.isUpgraded) {
           globalStore.currentUserAffiliatePromoCode = promoCode
           globalStore.notifyAffiliatePromo = true
         }
