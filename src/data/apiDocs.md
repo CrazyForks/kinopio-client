@@ -43,7 +43,7 @@ Users are representations of any account on Kinopio. Users are created by the se
 
 Routes with Auth as `apiKey` mean that the Authorization header apiKey must match the requested user.
 
-<div class="table-wrap users">
+<div class="table-wrap users routes-table-wrap">
 
 Method | Path | Description | Auth
 --- | --- | --- | ---
@@ -63,13 +63,13 @@ Method | Path | Description | Auth
 `GET`   | <code class="users">/user/inbox-space</code>            | Get info on the user's `Inbox` space. whether a space is an inbox or not is based on name only, so it's possible to have multiple `Inbox` spaces, but only one the most recently updated Inbox will be returned | `apiKey`
 `GET`   | <code class="users">/user/tags</code>                   | Get a list of the last edited <a href="#tags" class="badge button-badge tags">Tags</a> in your spaces                                                                  | `apiKey`
 `GET`   | <code class="users">/user/todos</code>                  | Get todo cards and boxes (item names start with `[]`, `[ ]`, or `[x]`), grouped by space                                                                            | `apiKey`
-`PATCH` | <code class="users">/user</code>                        | Update the authenticating user(s) based on an object body with user attributes. You can't patch `apiKey`, `password`, `emailIsVerified`, or `email`       | `apiKey`
+`PATCH` | <code class="users">/user</code>                        | Update the user based on an object body with updated user attributes. You can't patch `apiKey`, `password`, `emailIsVerified`, or `email`       | `apiKey`
 
 </div>
 
 <h3 class="badge users">User Attributes</h3>
 
-<div class="table-wrap users">
+<div class="table-wrap users attributes-table-wrap">
 
 Name | Type | Description
 --- | --- | ---
@@ -149,7 +149,7 @@ Routes with Auth `canViewSpace` or `canEditSpace` requires that your Authorizati
 
 The `closed` privacy state refers to `Public Read Only`.
 
-<div class="table-wrap spaces">
+<div class="table-wrap spaces routes-table-wrap">
 
 Method | Path | Description | Auth
 --- | --- | --- | ---
@@ -179,7 +179,7 @@ Method | Path | Description | Auth
 
 <h3 class="badge spaces">Space Attributes</h3>
 
-<div class="table-wrap spaces">
+<div class="table-wrap spaces attributes-table-wrap">
 
 Name | Type | Description
 --- | --- | ---
@@ -240,7 +240,7 @@ Cards are the building blocks of <a href="#spaces" class="badge spaces">Spaces</
 
 Routes with Auth `canEditSpace` requires that your Authorization apiKey belongs to a user with the permission to edit the space that the card belongs to.
 
-<div class="table-wrap cards">
+<div class="table-wrap cards routes-table-wrap">
 
 Method | Path | Description | Auth
 --- | --- | --- | ---
@@ -265,7 +265,7 @@ Method | Path | Description | Auth
 
 <h3 class="badge cards">Card Attributes</h3>
 
-<div class="table-wrap cards">
+<div class="table-wrap cards attributes-table-wrap">
 
 Name | Type | Description
 --- | --- | ---
@@ -327,7 +327,7 @@ Connections are the lines that connect cards together.
 
 Routes with Auth `canEditSpace` requires that your Authorization apiKey belongs to a user with the permission to edit the space that the connection belongs to.
 
-<div class="table-wrap connections">
+<div class="table-wrap connections routes-table-wrap">
 
 Method | Path | Description | Auth
 --- | --- | --- | ---
@@ -340,7 +340,7 @@ Method | Path | Description | Auth
 
 <h3 class="badge connections">Connection Attributes</h3>
 
-<div class="table-wrap connections">
+<div class="table-wrap connections attributes-table-wrap">
 
 Name | Type | Description
 --- | --- | ---
@@ -374,7 +374,7 @@ Boxes are items used by users to contain or organize cards in a space. They can 
 
 Routes with Auth `canEditSpace` requires that your Authorization apiKey belongs to a user with the permission to edit the space that the box belongs to.
 
-<div class="table-wrap boxes">
+<div class="table-wrap boxes routes-table-wrap">
 
 Method | Path | Description | Auth
 --- | --- | --- | ---
@@ -387,7 +387,7 @@ Method | Path | Description | Auth
 
 <h3 class="badge boxes">Box Attributes</h3>
 
-<div class="table-wrap boxes">
+<div class="table-wrap boxes attributes-table-wrap">
 
 Name | Type | Description
 --- | --- | ---
@@ -426,7 +426,7 @@ Lists are items used by users to vertically contain and organize cards in a spac
 
 Routes with Auth `canEditSpace` requires that your Authorization apiKey belongs to a user with the permission to edit the space that the list belongs to.
 
-<div class="table-wrap lists">
+<div class="table-wrap lists routes-table-wrap">
 
 Method | Path | Description | Auth
 --- | --- | --- | ---
@@ -439,7 +439,7 @@ Method | Path | Description | Auth
 
 <h3 class="badge lists">List Attributes</h3>
 
-<div class="table-wrap lists">
+<div class="table-wrap lists attributes-table-wrap">
 
 Name | Type | Description
 --- | --- | ---
@@ -483,7 +483,7 @@ Method | Path | Description | Auth
 
 <h3 class="badge tags">Tags Attributes</h3>
 
-<div class="table-wrap lists">
+<div class="table-wrap lists attributes-table-wrap">
 
 Name | Type | Description
 --- | --- | ---
@@ -519,7 +519,7 @@ Method | Path | Description | Auth
 
 <h3 class="badge notifications">Notifications Attributes</h3>
 
-<div class="table-wrap notifications">
+<div class="table-wrap notifications attributes-table-wrap">
 
 Name | Type | Description
 --- | --- | ---
@@ -548,7 +548,7 @@ Other routes used by the kinopio-client app, which you can also use in your inte
 
 <h3 class="badge other">other Routes</h3>
 
-<div class="table-wrap other">
+<div class="table-wrap other routes-table-wrap">
 
 Method | Path | Description | Auth
 --- | --- | --- | ---

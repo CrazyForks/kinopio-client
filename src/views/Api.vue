@@ -227,29 +227,60 @@ article.api-docs
     color var(--primary)
 
   .table-wrap
-    table
-      background var(--primary-background)
-      border-width 2px
-      border-style solid
-      &.all
+    &.all
+      table
         border-color khaki
-      &.users
+    &.users
+      table
         border-color #b9a8ff
-      &.spaces
+    &.spaces
+      table
         border-color pink
-      &.cards
+    &.cards
+      table
         border-color violet
-      &.connections
+    &.connections
+      table
         border-color salmon
-      &.boxes
+    &.boxes
+      table
         border-color lightskyblue
-      &.lists
+    &.lists
+      table
         border-color #f9cb77
-      &.tags
+    &.tags
+      table
         border-color mediumaquamarine
-      &.notifications
+    &.notifications
+      table
         border-color darkseagreen
-      &.other
+    &.other
+      table
         border-color cadetblue
 
+  table
+    background var(--primary-background)
+    border-width 2px
+    border-style solid
+    th,
+    td
+      padding 8px
+    td
+      border-right 0
+    code
+      background var(--secondary-background)
+    tr
+      &:hover
+        background var(--search-background)
+  .attributes-table-wrap
+    table
+      tr
+        td:first-child
+          // background pink
+          width 40%
+          code
+            word-break break-word
+        // td:nth-child(3)
+          // background blue
+          // max-width 20%
 </style>
