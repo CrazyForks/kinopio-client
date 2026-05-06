@@ -113,15 +113,15 @@ AboutJsonLd
 .page(:class="{ 'is-dark-theme': isThemeDark }")
   Header(:isDocumentPage="true")
   main.page(@click="closeAllDialogs")
-    .page-wrap
+    .page-wrap.api-page-wrap
       section.intro
         Wordmark
         h2 API Documentation
-        ul.api-contents
+        ul.api-toc
           li(v-for="item in items")
             a(:href="item.link")
               .badge.button-badge(:style="{ background: item.color }" :class="{ active: state.currentItems.includes(item.link) }") {{item.name}}
-        article.api
+        article.api-docs
           //- img.cat(src="https://kinopio.club/help/assets/cat.png")
           ApiDocs
 
@@ -130,7 +130,10 @@ AboutJsonLd
 </template>
 
 <style lang="stylus">
-ul.api-contents
+.api-page-wrap
+  max-width 1000px
+
+ul.api-toc
   padding 0
   position sticky
   top 45px
@@ -141,12 +144,11 @@ ul.api-contents
     a
       text-decoration none
 
-article.api
+article.api-docs
   .anchor
     padding-top 100px // offset anchor link
     margin-top -100px
     display block
-
   h2
     font-size 18px
   h3

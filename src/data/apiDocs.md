@@ -96,7 +96,7 @@ Name | Type | Description
 <code class="users">filterComments</code>                   | `Boolean` | Whether comment cards are hidden to the user
 <code class="users">filterShowDateUpdated</code>            | `Boolean` | Whether the user has has toggled the card date filter
 <code class="users">filterShowUsers</code>                  | `Boolean` | Whether the user has has toggled the card user filter
-<code class="users">isAmbassador</code>                     | `Boolean` | Whether the user is in the [friends of kinopio](https://kinopio.club/friends-of-kinopio-ambassadors-YNmS6C3fofN3R9mYgO1Bu) ambassador program. Is not user updatable.
+<code class="users">isAmbassador</code>                     | `Boolean` | Whether the user is in the [friends of kinopio](https://kinopio.club/friends-of-kinopio-ambassadors-YNmS6C3fofN3R9mYgO1Bu) affiliate program. Is not user updatable.
 <code class="users">isDonor</code>                          | `Boolean` | Whether the user has donated to Kinopio. Is not user updatable.
 <code class="users">isModerator</code>                      | `Boolean` | Whether the user is a moderator of the community forums or discord. Is not user updatable.
 <code class="users">isDebugMode</code>                      | `Boolean` | Whether the user has debug mode enabled, which displays item ids and other attributes in the kinopio-client.
