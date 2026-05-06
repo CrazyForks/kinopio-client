@@ -89,6 +89,7 @@ const updateSystemTheme = () => {
 // toc
 
 const items = computed(() => {
+  // TODO dark themes and programatic var colors
   const sections = [
     { name: 'All', color: 'khaki' },
     { name: 'Users', color: '#b9a8ff' },
@@ -116,7 +117,7 @@ AboutJsonLd
     .page-wrap.api-page-wrap
       section.intro
         Wordmark
-        h2 API Documentation
+        h2.page-title API DOCS
         ul.api-toc
           li(v-for="item in items")
             a(:href="item.link")
@@ -132,7 +133,8 @@ AboutJsonLd
 <style lang="stylus">
 .api-page-wrap
   max-width 1000px
-
+  p
+    max-width 440px // same as page.styl
 ul.api-toc
   padding 0
   position sticky
@@ -149,6 +151,7 @@ article.api-docs
     padding-top 100px // offset anchor link
     margin-top -100px
     display block
+
   h2
     font-size 18px
   h3
@@ -164,39 +167,10 @@ article.api-docs
       margin-bottom 0
 
     // TODO dark themes and programatic var colors
-    // .all,
-    // .users,
-    // .spaces,
-    // .cards,
-    // .connections,
-    // .connection-types,
-    // .boxes,
-    // .lists,
-    // .tags,
-    // .notifications,
-    // .other
-    //   color var(--primary)
-    //   padding 2px 5px
-    // .all
-    //   background khaki
-    // .users
-    //   background #b9a8ff
-    // .spaces
-    //   background pink
-    // .cards
-    //   background violet
-    // .connections
-    //   background salmon
-    // .boxes
-    //   background lightskyblue
-    // .lists
-    //   background #f9cb77
-    // .tags
-    //   background mediumaquamarine
-    // .notifications
-    //   background darkseagreen
-    // .other
-    //   background cadetblue
+
+  code
+    background var(--secondary-background)
+    margin-right 0
 
   .badge,
   code

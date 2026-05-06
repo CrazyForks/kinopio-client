@@ -6,11 +6,11 @@ Use of the API is subject to the [Use Restrictions Policy](/posts/use-restrictio
 
 Kinopio uses token-based authentication using your user `apiKey`. You can get your apiKey in the app through `User → Settings → Account → API`.
 
-> 🙈 Your API key carries the same privileges as your user account, so be sure to keep it secret!
-
 Use your apiKey in the `Authorization` header of each request.
 
-(For testing, you can also use a query string (`?apiKey=`) but this is less secure and not recommended)
+<p class="badge danger">🙈 Your API key carries the same privileges as your user account, so be sure to keep it secret!</p>
+
+<!-- (For testing, you can also use a query string (`?apiKey=`) but this is less secure and not recommended) -->
 
 ## Rate Limits
 
@@ -141,7 +141,7 @@ Name | Type | Description
 <a class="anchor" data-section="🍓" name="spaces"></a>
 <h2 class="badge spaces">Spaces</h2>
 
-Spaces are where your <a href="#cards" class="badge cards">Cards</a> and <a href="#connections" class="badge connections">Connections</a> live.
+Spaces are where your <a href="#cards" class="badge button-badge cards">Cards</a> and <a href="#connections" class="badge button-badge connections">Connections</a> live.
 
 <h3 class="badge spaces">Space Routes</h3>
 
