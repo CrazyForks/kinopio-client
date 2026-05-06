@@ -125,7 +125,9 @@ const items = computed(() => {
   items = items.map(item => {
     const name = item.name.toLowerCase()
     item.link = `#${name}`
-    utils.setCssVariable(`api-badge-${name}`, item.color)
+    if (!consts.isStaticPrerenderingPage) {
+      utils.setCssVariable(`api-badge-${name}`, item.color)
+    }
     return item
   })
   return items
