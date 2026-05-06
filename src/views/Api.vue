@@ -31,7 +31,6 @@ let tableWrapObserver
 const observeTableWraps = () => {
   tableWrapObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      console.log(entry)
       const sectionClass = Array.from(entry.target.classList).find(className => className !== 'section-wrap')
       if (!sectionClass) return
       if (entry.isIntersecting) {
@@ -63,7 +62,9 @@ onMounted(() => {
   } else {
     document.title = 'Kinopio API Docs'
   }
-  nextTick(() => observeTableWraps())
+  if (!consts.isStaticPrerenderingPage) {
+    nextTick(() => observeTableWraps())
+  }
 })
 
 onBeforeUnmount(() => {
