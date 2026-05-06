@@ -169,6 +169,8 @@ main.api-page-wrap
         text-decoration none
       .badge
         color var(--primary-on-light-background)
+  h2 + h2
+    margin-top 0
 
   article.api-docs
     margin-bottom 3rem

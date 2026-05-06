@@ -1,6 +1,4 @@
-The Kinopio API is used to find, save, and update the spaces of signed up users. You can use it to make cool things too.
-
-Use of the API is subject to the [Use Restrictions Policy](/posts/use-restrictions-policy/).
+The Kinopio API is used to find, save, and update the spaces of signed up users. You can use it to make your own integrations and tools.
 
 ## Authentication
 
@@ -16,11 +14,10 @@ Use your apiKey in the `Authorization` header of each request.
 
 The API is limited to 5 requests per second. If you exceed this rate, you will receive a `429` response and will need to wait 30 seconds before subsequent requests will succeed.
 
-## Routes
+## Routes and Attributes by Item Type
 
-
-<a class="anchor" name="all"></a>
 <h2 class="badge all">All</h2>
+<a class="anchor" name="all"></a>
 
 [https://api.kinopio.club](https://api.kinopio.club) is the base path for all routes
 
@@ -202,7 +199,7 @@ Name | Type | Description
 <code class="spaces">isFavorite</code>          | `Boolean` | Whether the space is favorited by the current user
 <code class="spaces">isRemoved</code>           | `Boolean` | Whether the space has been soft-removed. (can then be restored or permanently removed)
 <code class="spaces">isRestrictedByModerator</code> | `Boolean` | Whether the space has been marked as restricted. Restricted spaces are not shown in Explore, Live, or in the Everyone feed. This value cannot be patched, it is set manually by a moderator only when necessary.
-<code class="spaces">isTemplate</code>          | `Boolean` | Whether the space is a <a href="/posts/templates/">personal template</a>
+<code class="spaces">isTemplate</code>          | `Boolean` | Whether the space is a <a href="https://kinopio.club/help/posts/templates/">personal template</a>
 <code class="spaces">lines</code>                | `Array`   | A list of the Line dividers in the space
 <code class="spaces">lists</code>                | `Object`   | A list of the <a href="#lists" class="badge button-badge lists">Lists</a> in the space
 <code class="spaces">moonPhase</code>           | `String`  | Name of the moonPhase icon representing when the space was created. Possible values are `new-moon`, `waxing-crescent`, `waxing-quarter`, `waxing-gibbous`, `full-moon`, `waning-gibbous`, `waning-quarter`, `waning-crescent`
@@ -420,7 +417,7 @@ Name | Type | Description
 <a class="anchor" data-section="🍱" name="lists"></a>
 <h2 class="badge lists">Lists</h2>
 
-Lists are items used by users to vertically contain and organize cards in a space. They can be named, colored, and positioned. <a href="#cards" class="badge cards">Cards</a> that belong to lists have a `listId`, and `listPositionIndex`.
+Lists are items used by users to vertically contain and organize cards in a space. They can be named, colored, and positioned. <a href="#cards" class="badge button-badge cards">Cards</a> that belong to lists have a `listId`, and `listPositionIndex`.
 
 <h3 class="badge lists">List Routes</h3>
 
