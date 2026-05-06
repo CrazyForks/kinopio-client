@@ -262,6 +262,8 @@ article.api-docs
     background var(--primary-background)
     border-width 2px
     border-style solid
+    table-layout fixed
+    width 100%
     th,
     td
       padding 8px
@@ -271,16 +273,25 @@ article.api-docs
       background var(--secondary-background)
     tr
       &:hover
-        background var(--search-background)
+        background var(--secondary-hover-background)
+
+  .routes-table-wrap
+    th
+      // method
+      &:nth-child(1)
+        width 70px
+      // auth
+      &:nth-child(4)
+        width 120px
+
   .attributes-table-wrap
-    table
-      tr
-        td:first-child
-          // background pink
-          width 40%
-          code
-            word-break break-word
-        // td:nth-child(3)
-          // background blue
-          // max-width 20%
+    th
+      // type
+      &:nth-child(2)
+        width 80px
+    tr
+      // name
+      td:nth-child(1)
+        code
+          word-break break-word
 </style>
