@@ -171,6 +171,9 @@ main.api-page-wrap
         color var(--primary-on-light-background)
 
   article.api-docs
+    margin-bottom 3rem
+    p:has(.anchor)
+      pointer-events none
     .anchor
       padding-top 100px // offset anchor link
       margin-top -100px
