@@ -1373,10 +1373,14 @@ export const useApiStore = defineStore('api', {
     },
     async pdf () {
       const spaceStore = useSpaceStore()
-      const spaceId = spaceStore.id
+      const themeStore = useThemeStore()
       try {
-        const options = await this.requestOptions({ method: 'POST' })
-        const response = await fetch(`${consts.apiHost()}/services/pdf/${spaceId}`, options)
+        const body = {
+          spaceId: spaceStore.id,
+          isDarkTheme: themeStore.getIsThemeDark
+        }
+        const options = await this.requestOptions({ body, method: 'POST' })
+        const response = await fetch(`${consts.apiHost()}/services/pdf`, options)
         let url = await normalizeResponse(response)
         url = url.url
         return url
