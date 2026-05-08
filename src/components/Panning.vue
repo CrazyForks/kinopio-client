@@ -25,7 +25,8 @@ let shouldStartPanning,
   shouldPanNextFrame,
   velocity,
   momentumTimer,
-  shouldCancelMomentumTimer
+  shouldCancelMomentumTimer,
+  currentScroll
 
 let unsubscribes
 
@@ -69,15 +70,28 @@ const checkIfShouldStartMomentum = () => {
   }
   shouldCancelPanningTimer = true
 }
-
 const cancelMomentum = () => {
   shouldCancelMomentumTimer = true
+}
+
+// safari fix
+
+const updatecurrentScrollByDelta = (delta) => {
+  currentScroll.x += delta.x
+  currentScroll.y += delta.y
+}
+const safariFix = () => {
+  // force safari to recompute internal element positions after panning
+  // https://forum.kinopio.club/t/cursor-position-is-wrong-after-right-click-drag-to-pan/1799
+  if (!utils.isSafari()) { return }
+  window.scrollTo(currentScroll.x, currentScroll.y)
 }
 
 // panning
 
 const initPanning = (event) => {
   const position = utils.cursorPositionInPage(event)
+  currentScroll = { x: window.scrollX, y: window.scrollY }
   if (shouldStartPanning) {
     startPosition = position
     shouldStartPanning = false
@@ -102,6 +116,7 @@ const panningFrame = () => {
   // scroll frame
   if (shouldPanNextFrame) {
     window.scrollBy(panningDelta.x, panningDelta.y, 'instant')
+    updatecurrentScrollByDelta(panningDelta)
     shouldPanNextFrame = false
   }
   panningTimer = window.requestAnimationFrame(panningFrame)
@@ -121,12 +136,14 @@ const startMomentum = () => {
     const velocityIsLow = Math.abs(velocity.x) < momentumThreshold && Math.abs(velocity.y) < momentumThreshold
     if (velocityIsLow || shouldPanNextFrame || shouldCancelMomentumTimer) {
       window.cancelAnimationFrame(momentumTimer)
+      safariFix()
       return
     }
     // scroll frame
     velocity.x *= momentumDeceleration
     velocity.y *= momentumDeceleration
     window.scrollBy(velocity.x, velocity.y, 'instant')
+    updatecurrentScrollByDelta(velocity)
     momentumTimer = window.requestAnimationFrame(momentumFrame)
   }
   momentumTimer = window.requestAnimationFrame(momentumFrame)

@@ -6,6 +6,7 @@ import { useCardStore } from '@/stores/useCardStore'
 import { useBoxStore } from '@/stores/useBoxStore'
 import { useLineStore } from '@/stores/useLineStore'
 import { useListStore } from '@/stores/useListStore'
+import { useThemeStore } from '@/stores/useThemeStore'
 import { useApiStore } from '@/stores/useApiStore'
 
 import consts from './consts.js'
@@ -216,10 +217,15 @@ const router = {
       beforeEnter: async (to, from, next) => {
         const globalStore = useGlobalStore()
         const userStore = useUserStore()
+        const themeStore = useThemeStore()
         const spaceId = to.params.spaceId
         const collaboratorKey = to.query.collaboratorKey
         const readOnlyKey = to.query.readOnlyKey
+        const isDarkTheme = to.query.isDarkTheme
         await userStore.initializeUser()
+        if (isDarkTheme) {
+          themeStore.updateTheme('dark')
+        }
         globalStore.isLoadingSpace = true
         if (!spaceId) {
           globalStore.addNotification({ message: 'Invalid invite URL', type: 'danger' })
