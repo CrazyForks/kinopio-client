@@ -4,6 +4,12 @@ const apiHost = 'https://api.kinopio.club'
 const siteHost = 'https://kinopio.club'
 const timeout = 5000 // 5s
 const inviteDescription = 'Work on shared spaces together'
+const staticRoutes = {
+  '/api': {
+    title: 'Kinopio API Docs',
+    description: 'Build your own custom integrations and tools that can create, read, and edit your Kinopio cards and spaces.'
+  }
+}
 
 // space
 
@@ -98,7 +104,16 @@ export default async (request, context) => {
     console.info('🕊️ edge function request', url.href)
     const isGroupInvite = url.pathname.startsWith('/group/invite/')
     const isSpaceInvite = url.pathname.startsWith('/space/invite/')
+    const staticRoute = staticRoutes[url.pathname]
     const name = nameFromUrl(url)
+    // static route url
+    if (staticRoute) {
+      return rewriteIndexHtml({
+        context,
+        title: staticRoute.title,
+        description: staticRoute.description
+      })
+    }
     // group invite url
     if (isGroupInvite) {
       return rewriteIndexHtml({

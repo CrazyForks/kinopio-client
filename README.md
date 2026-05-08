@@ -111,6 +111,8 @@ To work with code that only works on https (e.g. clipboard copy and paste), [mkc
 
 During the deploy/build process (`npm run build`), [`vite-ssg`](https://github.com/antfu-collective/vite-ssg) generates static HTML pages of routes defined in `vite.config.js` in `ssgOptions.includedRoutes`. Static pages (compiled from vue router into `/dist`) are served to the client directly. The client only goes through vue router for non-static routes like `/app`.
 
+For unfurling, specify static pages in `page-meta.js`.
+
 To test pre-rendered page routes use `npm run build-dev`.
 
 ## Testing page-meta
