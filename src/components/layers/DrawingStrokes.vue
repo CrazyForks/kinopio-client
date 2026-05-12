@@ -104,6 +104,11 @@ const viewportWidth = computed(() => globalStore.viewportWidth)
 const currentUserIsSignedIn = computed(() => userStore.getUserIsSignedIn)
 const toolbarIsDrawing = computed(() => globalStore.getToolbarIsDrawing)
 const spaceComponentIsMounted = computed(() => globalStore.spaceComponentIsMounted)
+const eraserMask = computed(() => {
+  const hasEraserPaths = state.paths.some(path => path.isEraser)
+  if (!hasEraserPaths) { return null }
+  return 'url(#eraserMask)'
+})
 
 // clear
 const clearDrawing = () => {
@@ -415,7 +420,7 @@ svg.drawing-strokes(
             :data-rect-height="path.rect.height"
           )
   //- drawing strokes
-  g(:mask="'url(#eraserMask)'")
+  g(:mask="eraserMask")
     template(v-for="path in state.paths" :key="path.id")
       template(v-if="!path.isEraser")
         path(
@@ -459,7 +464,7 @@ teleport(to="#drawing-strokes-background" v-if="spaceComponentIsMounted")
               :data-rect-height="path.rect.height"
             )
     //- drawing strokes
-    g(:mask="'url(#eraserMask)'")
+    g(:mask="eraserMask")
       template(v-for="path in state.paths" :key="path.id")
         template(v-if="!path.isEraser")
           path(
