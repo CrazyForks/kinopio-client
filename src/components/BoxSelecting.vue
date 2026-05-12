@@ -4,6 +4,8 @@ import { reactive, computed, onMounted, onBeforeUnmount, watch, ref, nextTick } 
 import { useGlobalStore } from '@/stores/useGlobalStore'
 import { useCardStore } from '@/stores/useCardStore'
 import { useBoxStore } from '@/stores/useBoxStore'
+import { useLineStore } from '@/stores/useLineStore'
+import { useListStore } from '@/stores/useListStore'
 import { useUserStore } from '@/stores/useUserStore'
 import { useSpaceStore } from '@/stores/useSpaceStore'
 import { useBroadcastStore } from '@/stores/useBroadcastStore'
@@ -19,6 +21,8 @@ import { colord } from 'colord'
 const globalStore = useGlobalStore()
 const cardStore = useCardStore()
 const boxStore = useBoxStore()
+const lineStore = useLineStore()
+const listStore = useListStore()
 const userStore = useUserStore()
 const spaceStore = useSpaceStore()
 const broadcastStore = useBroadcastStore()
@@ -29,6 +33,8 @@ let selectableConnections = {}
 let previouslySelectedCardIds = []
 let previouslySelectedConnectionIds = []
 let previouslySelectedBoxesIds = []
+let previouslySelectedLineIds = []
+let previouslySelectedListIds = []
 
 const state = reactive({
   direction: 'to bottom right',
@@ -108,6 +114,8 @@ const updatePreviouslySelectedItems = () => {
   previouslySelectedCardIds = globalStore.multipleCardsSelectedIds
   previouslySelectedConnectionIds = globalStore.multipleConnectionsSelectedIds
   previouslySelectedBoxesIds = globalStore.multipleBoxesSelectedIds
+  previouslySelectedLineIds = globalStore.multipleLinesSelectedIds
+  previouslySelectedListIds = globalStore.multipleListsSelectedIds
 }
 const boxSelection = (start, end) => {
   return {
@@ -200,12 +208,14 @@ const updateItems = (items) => {
   return selectable
 }
 const updateSelectableItems = () => {
+  // cards
   let cards = cardStore.getCardsSelectableInViewport()
-  let boxes = boxStore.getBoxesSelectableInViewport()
   cards = cards.map(card => {
     card.isCard = true
     return card
   })
+  // boxes
+  let boxes = boxStore.getBoxesSelectableInViewport()
   const array = []
   boxes.forEach(box => {
     const element = document.querySelector(`.box-info[data-box-id="${box.id}"]`)
@@ -225,7 +235,38 @@ const updateSelectableItems = () => {
   })
   boxes = array
   boxes = boxes.filter(box => Boolean(box))
-  const items = cards.concat(boxes)
+  // lines
+  const lines = []
+  document.querySelectorAll('.line-info[data-line-id]').forEach(element => {
+    const id = element.dataset.lineId
+    const line = lineStore.getLine(id)
+    if (!line) { return }
+    const rect = element.getBoundingClientRect()
+    lines.push({
+      id: line.id,
+      x: rect.x + window.scrollX,
+      y: rect.y + window.scrollY,
+      width: rect.width,
+      height: rect.height,
+      isLine: true
+    })
+  })
+  // lists
+  const lists = []
+  listStore.getAllLists.forEach(list => {
+    const width = Number(list.resizeWidth) || list.width
+    const height = list.height
+    if (!width || !height) { return }
+    lists.push({
+      id: list.id,
+      x: list.x,
+      y: list.y,
+      width,
+      height,
+      isList: true
+    })
+  })
+  const items = cards.concat(boxes).concat(lines).concat(lists)
   selectableItems = updateItems(items)
 }
 const updateSelectableConnections = () => {
@@ -266,6 +307,10 @@ const mergePreviouslySelected = (selectedIds, type) => {
     previouslySelectedIds = previouslySelectedConnectionIds
   } else if (type === 'boxes') {
     previouslySelectedIds = previouslySelectedBoxesIds
+  } else if (type === 'lines') {
+    previouslySelectedIds = previouslySelectedLineIds
+  } else if (type === 'lists') {
+    previouslySelectedIds = previouslySelectedListIds
   }
   previouslySelectedIds.forEach(id => {
     const index = selectedIds.indexOf(id)
@@ -289,8 +334,12 @@ const selectItems = (selection, relativePosition) => {
   selectedItems = uniqBy(selectedItems, 'id')
   const cards = selectedItems.filter(item => item.isCard)
   const boxes = selectedItems.filter(item => item.isBox)
+  const lines = selectedItems.filter(item => item.isLine)
+  const lists = selectedItems.filter(item => item.isList)
   selectItemsByType(cards, 'cards')
   selectItemsByType(boxes, 'boxes')
+  selectItemsByType(lines, 'lines')
+  selectItemsByType(lists, 'lists')
 }
 const selectItemsByType = (items, type) => {
   let selectedItemIds = items.map(item => item.id)
@@ -299,6 +348,10 @@ const selectItemsByType = (items, type) => {
     globalStore.updateMultipleCardsSelectedIds(selectedItemIds)
   } else if (type === 'boxes') {
     globalStore.updateMultipleBoxesSelectedIds(selectedItemIds)
+  } else if (type === 'lines') {
+    globalStore.updateMultipleLinesSelectedIds(selectedItemIds)
+  } else if (type === 'lists') {
+    globalStore.updateMultipleListsSelectedIds(selectedItemIds)
   }
 }
 const pointsAlongPath = (connection) => {
