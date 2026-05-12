@@ -403,7 +403,7 @@ const handleMouseDownEvents = (event) => {
     globalStore.currentUserBoxSelectStart = position
   } else if (shouldPan) {
     prevRightClickPosition = utils.cursorPositionInViewport(event)
-    prevRightClickTime = utils.unixTime()
+    prevRightClickTime = Date.now()
     event.preventDefault()
     if (!isMinimap) {
       globalStore.updateCurrentUserIsPanning(true)
@@ -415,6 +415,7 @@ const handleMouseDownEvents = (event) => {
       globalStore.updateCurrentUserIsPanning(true)
     }
   }
+  // sonar ping in debug mode
   if (isRightClick && userDisablePan) {
     if (!isCanvasScope(event)) { return }
     globalStore.normalizeTriggerSonarPing(event)
@@ -430,7 +431,6 @@ const handleMouseMoveEvents = (event) => {
   }
 }
 // on mouse up
-// right clicks don't trigger mouse up
 const handleMouseUpEvents = async (event) => {
   if (globalStore.shouldCancelNextMouseUpInteraction) { return }
   const shouldPan = globalStore.currentUserIsPanning
@@ -445,11 +445,10 @@ const handleMouseUpEvents = async (event) => {
   prevCursorPosition = undefined
   globalStore.updateCurrentUserIsPanning(false)
   globalStore.currentUserIsBoxSelecting = false
-
   // sonar ping
   await nextTick()
   const currentPosition = utils.cursorPositionInViewport(event)
-  const currentTime = utils.unixTime()
+  const currentTime = Date.now()
   const cursorsAreClose = utils.cursorsAreClose(prevRightClickPosition, currentPosition)
   const timeDelta = currentTime - prevRightClickTime
   const timesAreClose = timeDelta < 400 // ms
