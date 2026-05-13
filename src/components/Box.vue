@@ -5,6 +5,7 @@ import { useGlobalStore } from '@/stores/useGlobalStore'
 import { useCardStore } from '@/stores/useCardStore'
 import { useConnectionStore } from '@/stores/useConnectionStore'
 import { useBoxStore } from '@/stores/useBoxStore'
+import { useListStore } from '@/stores/useListStore'
 import { useUserStore } from '@/stores/useUserStore'
 import { useSpaceStore } from '@/stores/useSpaceStore'
 import { useBroadcastStore } from '@/stores/useBroadcastStore'
@@ -25,6 +26,7 @@ const globalStore = useGlobalStore()
 const cardStore = useCardStore()
 const connectionStore = useConnectionStore()
 const boxStore = useBoxStore()
+const listStore = useListStore()
 const userStore = useUserStore()
 const spaceStore = useSpaceStore()
 const broadcastStore = useBroadcastStore()
@@ -395,6 +397,8 @@ const startDraggingDuplicateItems = async (event) => {
   const boxes = boxIds.map(id => boxStore.getBox(id))
   const index = boxIds.findIndex(id => id === props.box.id) || 0
   // get selected items
+  const lists = listStore.getListsSelected
+  listStore.selectItemsInSelectedLists()
   const cards = globalStore.multipleCardsSelectedIds.map(id => cardStore.getCard(id))
   const connectionIds = globalStore.multipleConnectionsSelectedIds
   const connections = connectionStore.getConnections(connectionIds)
@@ -402,7 +406,8 @@ const startDraggingDuplicateItems = async (event) => {
   const newItems = await utils.uniqueSpaceItems({
     cards: utils.clone(cards),
     boxes: utils.clone(boxes),
-    connections: utils.clone(connections)
+    connections: utils.clone(connections),
+    lists: utils.clone(lists)
   })
   const newCards = newItems.cards.map(card => {
     card.z += 1
@@ -412,7 +417,7 @@ const startDraggingDuplicateItems = async (event) => {
     box.z += 1
     return box
   })
-  const newCurrentBox = newBoxes[index]
+  newItems.lists.forEach(list => listStore.createList({ list }))
   newCards.forEach(card => cardStore.createCard(card, true))
   newBoxes.forEach(box => boxStore.createBox(box))
   newItems.connections.forEach(connection => connectionStore.createConnection(connection))
@@ -421,6 +426,10 @@ const startDraggingDuplicateItems = async (event) => {
   // select new items
   globalStore.multipleCardsSelectedIds = newCards.map(card => card.id)
   globalStore.multipleBoxesSelectedIds = newBoxes.map(box => box.id)
+  globalStore.multipleConnectionsSelectedIds = newItems.connections.map(connection => connection.id)
+  globalStore.multipleListsSelectedIds = newItems.lists.map(list => list.id)
+  newItems.lists.forEach(list => listStore.updateListDimensions(list))
+  const newCurrentBox = newBoxes[index]
   return newCurrentBox.id
 }
 const startBoxInfoInteraction = async (event) => {
