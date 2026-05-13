@@ -116,6 +116,9 @@ const childDialogIsVisible = (value) => {
   state.childDialogIsVisible = value
   state.embedIsVisible = false
 }
+const selectGroup = (group) => {
+  closeDialogs()
+}
 
 // toggles
 
@@ -202,11 +205,7 @@ dialog.share.wide(v-if="props.visible" :open="props.visible" @click.left.stop="c
             img.icon(src="@/assets/presentation.svg")
 
   //- Invite
-  InviteToSpace(:visible="isSpaceMember && currentUserIsSignedIn" @closeDialogs="closeDialogs" @childDialogIsVisible="childDialogIsVisible")
-
-  //- //- Group
-  //- section
-
+  InviteToSpace(:visible="isSpaceMember && currentUserIsSignedIn" @closeDialogs="closeDialogs" @childDialogIsVisible="childDialogIsVisible" @selectGroup="selectGroup")
   section(v-if="!spaceIsRemote")
     p
       span To share or invite collaborators,

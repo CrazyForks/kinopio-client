@@ -178,6 +178,7 @@ const toggleSpaceGroup = async (group) => {
   } else {
     await updateSpaceGroup(group)
   }
+  emit('selectGroup', group)
 }
 const updateSpaceGroup = (group) => {
   const isSpaceCreator = userStore.getUserIsSpaceCreator
