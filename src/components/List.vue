@@ -3,6 +3,7 @@ import { reactive, computed, onMounted, onBeforeUnmount, watch, ref, nextTick } 
 
 import { useGlobalStore } from '@/stores/useGlobalStore'
 import { useListStore } from '@/stores/useListStore'
+import { useBoxStore } from '@/stores/useBoxStore'
 import { useCardStore } from '@/stores/useCardStore'
 import { useConnectionStore } from '@/stores/useConnectionStore'
 import { useUserStore } from '@/stores/useUserStore'
@@ -15,10 +16,12 @@ import consts from '@/consts.js'
 import ProgressCircle from '@/components/ProgressCircle.vue'
 
 import { nanoid } from 'nanoid'
+import uniq from 'lodash-es/uniq'
 
 const globalStore = useGlobalStore()
 const listStore = useListStore()
 const cardStore = useCardStore()
+const boxStore = useBoxStore()
 const connectionStore = useConnectionStore()
 const userStore = useUserStore()
 const spaceStore = useSpaceStore()
@@ -115,6 +118,55 @@ const updateIsHover = (value) => {
   if (isPaintSelecting.value) { return }
   state.isHover = value
 }
+
+const startDraggingDuplicateItems = async (event) => {
+  globalStore.currentUserIsDraggingDuplicateItem = true
+  // get selected items
+  let listIds = globalStore.multipleListsSelectedIds.concat([props.list.id])
+  listIds = uniq(listIds)
+  const lists = listIds.map(id => listStore.getList(id))
+  globalStore.multipleListsSelectedIds = lists.map(list => list.id)
+  const index = listIds.findIndex(id => id === props.list.id) || 0
+  listStore.selectItemsInSelectedLists()
+  const cards = globalStore.multipleCardsSelectedIds.map(id => cardStore.getCard(id))
+  const boxes = globalStore.multipleBoxesSelectedIds.map(id => boxStore.getBox(id))
+  const itemIds = cards.concat(boxes).map(item => item.id)
+  const connections = connectionStore.getConnectionsByItemIds(itemIds)
+  // create new items
+  const newItems = await utils.uniqueSpaceItems({
+    cards: utils.clone(cards),
+    boxes: utils.clone(boxes),
+    lists: utils.clone(lists),
+    connections: utils.clone(connections)
+  })
+  const newCards = newItems.cards.map(card => {
+    card.z += 1
+    return card
+  })
+  const newBoxes = newItems.boxes.map(box => {
+    box.z += 1
+    return box
+  })
+  const newLists = newItems.lists.map(list => {
+    list.z += 1
+    return list
+  })
+  const newCurrentList = newLists[index]
+  newItems.connections.forEach(connection => connectionStore.createConnection(connection))
+  newLists.forEach(list => listStore.createList({ list }))
+  newCards.forEach(card => cardStore.createCard(card, true))
+  newBoxes.forEach(box => boxStore.createBox(box))
+  // unselect old items
+  globalStore.clearMultipleSelected()
+  // select new items
+  globalStore.multipleCardsSelectedIds = newCards.map(card => card.id)
+  globalStore.multipleBoxesSelectedIds = newBoxes.map(box => box.id)
+  globalStore.multipleConnectionsSelectedIds = newItems.connections.map(connection => connection.id)
+  globalStore.multipleListsSelectedIds = newLists.map(list => list.id)
+  newItems.lists.forEach(list => listStore.updateListDimensions(list))
+  return newCurrentList.id
+}
+
 const startListInfoInteraction = async (event) => {
   if (!currentListIsSelected.value) {
     globalStore.clearMultipleSelected()
@@ -124,12 +176,12 @@ const startListInfoInteraction = async (event) => {
   globalStore.currentDraggingListId = ''
   globalStore.closeAllDialogs()
   globalStore.currentUserIsDraggingList = true
-  const list = props.list.id
-  // if (event.altKey) {
-  //   list = await startDraggingDuplicateItems(event)
-  // }
-  globalStore.currentDraggingListId = list
-  listStore.incrementListZ(props.list.id)
+  let listId = props.list.id
+  if (event.altKey) {
+    listId = await startDraggingDuplicateItems(event)
+  }
+  globalStore.currentDraggingListId = listId
+  listStore.incrementListZ(listId)
 }
 const endListInfoInteraction = (event) => {
   // const isMeta = event.metaKey || event.ctrlKey
@@ -304,7 +356,7 @@ const updateTouchPosition = (event) => {
 const updateCurrentTouchPosition = (event) => {
   currentTouchPosition = utils.cursorPositionInViewport(event)
   if (currentListIsBeingDragged.value || isResizing.value) {
-    event.preventDefault() // allows dragging boxes without scrolling
+    event.preventDefault() // allows dragging items without scrolling
   }
 }
 const touchIsNearTouchPosition = (event) => {

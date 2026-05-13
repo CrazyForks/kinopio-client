@@ -5,6 +5,7 @@ import { useGlobalStore } from '@/stores/useGlobalStore'
 import { useConnectionStore } from '@/stores/useConnectionStore'
 import { useCardStore } from '@/stores/useCardStore'
 import { useBoxStore } from '@/stores/useBoxStore'
+import { useListStore } from '@/stores/useListStore'
 import { useUserStore } from '@/stores/useUserStore'
 import { useSpaceStore } from '@/stores/useSpaceStore'
 import { useApiStore } from '@/stores/useApiStore'
@@ -49,6 +50,7 @@ const globalStore = useGlobalStore()
 const cardStore = useCardStore()
 const connectionStore = useConnectionStore()
 const boxStore = useBoxStore()
+const listStore = useListStore()
 const userStore = useUserStore()
 const spaceStore = useSpaceStore()
 const apiStore = useApiStore()
@@ -1250,16 +1252,21 @@ const checkIfShouldDragMultipleCards = (event, cardId = props.card.id) => {
 const startDraggingDuplicateItems = async (event) => {
   globalStore.currentUserIsDraggingDuplicateItem = true
   checkIfShouldDragMultipleCards(event)
+  const lists = listStore.getListsSelected
+  listStore.selectItemsInSelectedLists()
   let cardIds = globalStore.multipleCardsSelectedIds.concat([props.card.id])
   cardIds = uniq(cardIds)
   const cards = cardIds.map(id => cardStore.getCard(id))
   const index = cardIds.findIndex(id => id === props.card.id) || 0
   const boxes = globalStore.multipleBoxesSelectedIds.map(id => boxStore.getBox(id))
-  globalStore.clearMultipleSelected()
+  const itemIds = cards.concat(boxes).map(item => item.id)
+  const connections = connectionStore.getConnectionsByItemIds(itemIds)
   // create new items
   const newItems = await utils.uniqueSpaceItems({
     cards: utils.clone(cards),
-    boxes: utils.clone(boxes)
+    boxes: utils.clone(boxes),
+    lists: utils.clone(lists),
+    connections: utils.clone(connections)
   })
   const newCards = newItems.cards.map(card => {
     card.z += 1
@@ -1269,13 +1276,22 @@ const startDraggingDuplicateItems = async (event) => {
     box.z += 1
     return box
   })
+  const newLists = newItems.lists.map(list => {
+    list.z += 1
+    return list
+  })
   const newCurrentCard = newCards[index]
+  newItems.connections.forEach(connection => connectionStore.createConnection(connection))
   newCards.forEach(card => cardStore.createCard(card, true))
   newBoxes.forEach(box => boxStore.createBox(box, true))
+  newLists.forEach(list => listStore.createList({ list }))
+  // unselect old items
+  globalStore.clearMultipleSelected()
   // select new items
   globalStore.multipleCardsSelectedIds = newCards.map(card => card.id)
   globalStore.multipleBoxesSelectedIds = newBoxes.map(box => box.id)
-  globalStore.multipleCardsSelectedIds = newCards.map(card => card.id)
+  globalStore.multipleConnectionsSelectedIds = newItems.connections.map(connection => connection.id)
+  globalStore.multipleListsSelectedIds = newLists.map(list => list.id)
   return newCurrentCard.id
 }
 const startDraggingCard = async (event) => {
