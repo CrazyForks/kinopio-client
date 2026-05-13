@@ -1515,11 +1515,14 @@ export const useGlobalStore = defineStore('global', {
       this.notifyConnectionError = false
       this.notifyServerCouldNotSave = false
       this.notifySignUpToEditSpace = false
-      this.notifySignUpToJoinGroup = false
       this.notifyCardsCreatedIsNearLimit = false
       this.notifyCardsCreatedIsOverLimit = false
       this.notifyMoveOrCopyToSpace = false
       this.notificationsWithPosition = []
+    },
+    clearNotificationsSignUpOrIn () {
+      this.notifySignUpToJoinGroup = false
+      this.clearAllNotifications()
     },
     clearAllInteractingWithAndSelected () {
       this.currentUserIsDraggingCard = false
