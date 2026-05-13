@@ -3,6 +3,10 @@ import { reactive, computed, onMounted, onUnmounted, watch, ref, nextTick } from
 
 import { useGlobalStore } from '@/stores/useGlobalStore'
 import { useLineStore } from '@/stores/useLineStore'
+import { useListStore } from '@/stores/useListStore'
+import { useBoxStore } from '@/stores/useBoxStore'
+import { useCardStore } from '@/stores/useCardStore'
+import { useConnectionStore } from '@/stores/useConnectionStore'
 import { useUserStore } from '@/stores/useUserStore'
 import { useSpaceStore } from '@/stores/useSpaceStore'
 import { useBroadcastStore } from '@/stores/useBroadcastStore'
@@ -11,8 +15,14 @@ import utils from '@/utils.js'
 import consts from '@/consts.js'
 import postMessage from '@/postMessage.js'
 
+import uniq from 'lodash-es/uniq'
+
 const globalStore = useGlobalStore()
 const lineStore = useLineStore()
+const listStore = useListStore()
+const cardStore = useCardStore()
+const boxStore = useBoxStore()
+const connectionStore = useConnectionStore()
 const userStore = useUserStore()
 const spaceStore = useSpaceStore()
 const broadcastStore = useBroadcastStore()
@@ -151,7 +161,60 @@ const currentLineIsSelected = computed(() => {
   const selected = globalStore.multipleLinesSelectedIds
   return selected.find(id => props.line.id === id)
 })
-const startLineInfoInteraction = (event) => {
+const startDraggingDuplicateItems = async (event) => {
+  globalStore.currentUserIsDraggingDuplicateItem = true
+  // get selected items
+  // lines
+  let lineIds = globalStore.multipleLinesSelectedIds.concat(globalStore.currentDraggingLineId)
+  lineIds = lineIds.filter(id => Boolean(id))
+  lineIds = uniq(lineIds)
+  const lines = lineIds.map(id => lineStore.getLine(id))
+  // lists
+  const listIds = globalStore.multipleListsSelectedIds
+  const lists = listIds.map(id => listStore.getList(id))
+  globalStore.multipleListsSelectedIds = lists.map(list => list.id)
+  const index = listIds.findIndex(id => id === props.list.id) || 0
+  listStore.selectItemsInSelectedLists()
+  // cards
+  const cards = globalStore.multipleCardsSelectedIds.map(id => cardStore.getCard(id))
+  // boxes
+  const boxes = globalStore.multipleBoxesSelectedIds.map(id => boxStore.getBox(id))
+  // connections
+  const itemIds = cards.concat(boxes).map(item => item.id)
+  const connections = connectionStore.getConnectionsByItemIds(itemIds)
+  // create new items
+  const newItems = await utils.uniqueSpaceItems({
+    cards: utils.clone(cards),
+    boxes: utils.clone(boxes),
+    lists: utils.clone(lists),
+    connections: utils.clone(connections),
+    lines: utils.clone(lines)
+  })
+  const itemTypes = ['cards', 'boxes', 'lists']
+  itemTypes.forEach(itemType => {
+    newItems[itemType].map(item => {
+      item.z += 1
+      return item
+    })
+  })
+  const newCurrentLine = newItems.lines[index]
+  newItems.connections.forEach(connection => connectionStore.createConnection(connection))
+  newItems.lists.forEach(list => listStore.createList({ list }))
+  newItems.cards.forEach(card => cardStore.createCard(card, true))
+  newItems.boxes.forEach(box => boxStore.createBox(box))
+  newItems.lines.forEach(line => lineStore.createLine(line))
+  // unselect old items
+  globalStore.clearMultipleSelected()
+  // select new items
+  globalStore.multipleCardsSelectedIds = newItems.cards.map(card => card.id)
+  globalStore.multipleBoxesSelectedIds = newItems.boxes.map(box => box.id)
+  globalStore.multipleConnectionsSelectedIds = newItems.connections.map(connection => connection.id)
+  globalStore.multipleListsSelectedIds = newItems.lists.map(list => list.id)
+  globalStore.multipleLinesSelectedIds = newItems.lines.map(line => line.id)
+  newItems.lists.forEach(list => listStore.updateListDimensions(list))
+  return newCurrentLine.id
+}
+const startLineInfoInteraction = async (event) => {
   if (!currentLineIsSelected.value) {
     globalStore.clearMultipleSelected()
   }
@@ -160,8 +223,12 @@ const startLineInfoInteraction = (event) => {
   globalStore.linesWereDragged = false
   globalStore.currentUserIsDraggingLine = true
   globalStore.currentDraggingLineId = props.line.id
+  let lineId = props.line.id
+  if (event.altKey) {
+    lineId = await startDraggingDuplicateItems(event)
+  }
   const updates = {
-    lineId: props.line.id,
+    lineId,
     userId: userStore.id
   }
   broadcastStore.update({ updates, action: 'addToRemoteLinesDragging' })
