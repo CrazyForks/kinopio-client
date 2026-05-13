@@ -388,17 +388,21 @@ const isResizing = computed(() => {
 })
 const startDraggingDuplicateItems = async (event) => {
   globalStore.currentUserIsDraggingDuplicateItem = true
-  // select box
+  // select box and items inside
   boxStore.selectItemsInSelectedBoxes(props.box)
   let boxIds = globalStore.multipleBoxesSelectedIds.concat([props.box.id])
   boxIds = uniq(boxIds)
   const boxes = boxIds.map(id => boxStore.getBox(id))
   const index = boxIds.findIndex(id => id === props.box.id) || 0
+  // get selected items
   const cards = globalStore.multipleCardsSelectedIds.map(id => cardStore.getCard(id))
+  const connectionIds = globalStore.multipleConnectionsSelectedIds
+  const connections = connectionStore.getConnections(connectionIds)
   // create new items
   const newItems = await utils.uniqueSpaceItems({
     cards: utils.clone(cards),
-    boxes: utils.clone(boxes)
+    boxes: utils.clone(boxes),
+    connections: utils.clone(connections)
   })
   const newCards = newItems.cards.map(card => {
     card.z += 1
@@ -411,6 +415,7 @@ const startDraggingDuplicateItems = async (event) => {
   const newCurrentBox = newBoxes[index]
   newCards.forEach(card => cardStore.createCard(card, true))
   newBoxes.forEach(box => boxStore.createBox(box))
+  newItems.connections.forEach(connection => connectionStore.createConnection(connection))
   // unselect old items
   globalStore.clearMultipleSelected()
   // select new items
