@@ -665,8 +665,7 @@ const dragBoxes = (event) => {
     }
     broadcastStore.update({ updates, action: 'addToRemoteBoxesDragging' })
     const isMetaKey = event.metaKey || event.ctrlKey // drag only box
-    const isAltKey = event.altKey // duplicate box
-    const preventSelectItemsInside = isMetaKey || isAltKey
+    const preventSelectItemsInside = isMetaKey || globalStore.currentUserIsDraggingDuplicateItem
     if (!preventSelectItemsInside) {
       boxStore.selectItemsInSelectedBoxes()
       globalStore.multipleBoxesSelectedIds.push(globalStore.currentDraggingBoxId)
