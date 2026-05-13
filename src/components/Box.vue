@@ -394,9 +394,7 @@ const startDraggingDuplicateItems = async (event) => {
   boxIds = uniq(boxIds)
   const boxes = boxIds.map(id => boxStore.getBox(id))
   const index = boxIds.findIndex(id => id === props.box.id) || 0
-
   const cards = globalStore.multipleCardsSelectedIds.map(id => cardStore.getCard(id))
-  globalStore.clearMultipleSelected()
   // create new items
   const newItems = await utils.uniqueSpaceItems({
     cards: utils.clone(cards),
@@ -413,10 +411,11 @@ const startDraggingDuplicateItems = async (event) => {
   const newCurrentBox = newBoxes[index]
   newCards.forEach(card => cardStore.createCard(card, true))
   newBoxes.forEach(box => boxStore.createBox(box))
+  // unselect old items
+  globalStore.clearMultipleSelected()
   // select new items
   globalStore.multipleCardsSelectedIds = newCards.map(card => card.id)
   globalStore.multipleBoxesSelectedIds = newBoxes.map(box => box.id)
-  globalStore.multipleCardsSelectedIds = newCards.map(card => card.id)
   return newCurrentBox.id
 }
 const startBoxInfoInteraction = async (event) => {
