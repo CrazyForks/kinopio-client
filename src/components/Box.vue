@@ -2,10 +2,8 @@
 import { reactive, computed, onMounted, onBeforeUnmount, onUpdated, onUnmounted, watch, ref, nextTick } from 'vue'
 
 import { useGlobalStore } from '@/stores/useGlobalStore'
-import { useCardStore } from '@/stores/useCardStore'
 import { useConnectionStore } from '@/stores/useConnectionStore'
 import { useBoxStore } from '@/stores/useBoxStore'
-import { useListStore } from '@/stores/useListStore'
 import { useUserStore } from '@/stores/useUserStore'
 import { useSpaceStore } from '@/stores/useSpaceStore'
 import { useBroadcastStore } from '@/stores/useBroadcastStore'
@@ -20,13 +18,10 @@ import postMessage from '@/postMessage.js'
 
 import randomColor from 'randomcolor'
 import { colord, extend } from 'colord'
-import uniq from 'lodash-es/uniq'
 
 const globalStore = useGlobalStore()
-const cardStore = useCardStore()
 const connectionStore = useConnectionStore()
 const boxStore = useBoxStore()
-const listStore = useListStore()
 const userStore = useUserStore()
 const spaceStore = useSpaceStore()
 const broadcastStore = useBroadcastStore()

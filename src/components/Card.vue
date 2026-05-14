@@ -41,7 +41,6 @@ import randomColor from 'randomcolor'
 import { nanoid } from 'nanoid'
 import { colord, extend } from 'colord'
 import namesPlugin from 'colord/plugins/names'
-import uniq from 'lodash-es/uniq'
 
 dayjs.extend(isToday)
 extend([namesPlugin])

@@ -3,7 +3,6 @@ import { reactive, computed, onMounted, onBeforeUnmount, watch, ref, nextTick } 
 
 import { useGlobalStore } from '@/stores/useGlobalStore'
 import { useListStore } from '@/stores/useListStore'
-import { useBoxStore } from '@/stores/useBoxStore'
 import { useCardStore } from '@/stores/useCardStore'
 import { useConnectionStore } from '@/stores/useConnectionStore'
 import { useUserStore } from '@/stores/useUserStore'
@@ -16,12 +15,10 @@ import consts from '@/consts.js'
 import ProgressCircle from '@/components/ProgressCircle.vue'
 
 import { nanoid } from 'nanoid'
-import uniq from 'lodash-es/uniq'
 
 const globalStore = useGlobalStore()
 const listStore = useListStore()
 const cardStore = useCardStore()
-const boxStore = useBoxStore()
 const connectionStore = useConnectionStore()
 const userStore = useUserStore()
 const spaceStore = useSpaceStore()

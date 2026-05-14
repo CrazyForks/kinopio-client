@@ -3,10 +3,6 @@ import { reactive, computed, onMounted, onUnmounted, watch, ref, nextTick } from
 
 import { useGlobalStore } from '@/stores/useGlobalStore'
 import { useLineStore } from '@/stores/useLineStore'
-import { useListStore } from '@/stores/useListStore'
-import { useBoxStore } from '@/stores/useBoxStore'
-import { useCardStore } from '@/stores/useCardStore'
-import { useConnectionStore } from '@/stores/useConnectionStore'
 import { useUserStore } from '@/stores/useUserStore'
 import { useSpaceStore } from '@/stores/useSpaceStore'
 import { useBroadcastStore } from '@/stores/useBroadcastStore'
@@ -15,14 +11,8 @@ import utils from '@/utils.js'
 import consts from '@/consts.js'
 import postMessage from '@/postMessage.js'
 
-import uniq from 'lodash-es/uniq'
-
 const globalStore = useGlobalStore()
 const lineStore = useLineStore()
-const listStore = useListStore()
-const cardStore = useCardStore()
-const boxStore = useBoxStore()
-const connectionStore = useConnectionStore()
 const userStore = useUserStore()
 const spaceStore = useSpaceStore()
 const broadcastStore = useBroadcastStore()
