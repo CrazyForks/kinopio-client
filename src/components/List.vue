@@ -118,69 +118,20 @@ const updateIsHover = (value) => {
   if (isPaintSelecting.value) { return }
   state.isHover = value
 }
-
-const startDraggingDuplicateItems = async (event) => {
-  globalStore.currentUserIsDraggingDuplicateItem = true
-  // get selected items
-  let listIds = globalStore.multipleListsSelectedIds.concat([props.list.id])
-  listIds = uniq(listIds)
-  const lists = listIds.map(id => listStore.getList(id))
-  globalStore.multipleListsSelectedIds = lists.map(list => list.id)
-  const index = listIds.findIndex(id => id === props.list.id) || 0
-  listStore.selectItemsInSelectedLists()
-  const cards = globalStore.multipleCardsSelectedIds.map(id => cardStore.getCard(id))
-  const boxes = globalStore.multipleBoxesSelectedIds.map(id => boxStore.getBox(id))
-  const itemIds = cards.concat(boxes).map(item => item.id)
-  const connections = connectionStore.getConnectionsByItemIds(itemIds)
-  // create new items
-  const newItems = await utils.uniqueSpaceItems({
-    cards: utils.clone(cards),
-    boxes: utils.clone(boxes),
-    lists: utils.clone(lists),
-    connections: utils.clone(connections)
-  })
-  const newCards = newItems.cards.map(card => {
-    card.z += 1
-    return card
-  })
-  const newBoxes = newItems.boxes.map(box => {
-    box.z += 1
-    return box
-  })
-  const newLists = newItems.lists.map(list => {
-    list.z += 1
-    return list
-  })
-  const newCurrentList = newLists[index]
-  newItems.connections.forEach(connection => connectionStore.createConnection(connection))
-  newLists.forEach(list => listStore.createList({ list }))
-  newCards.forEach(card => cardStore.createCard(card, true))
-  newBoxes.forEach(box => boxStore.createBox(box))
-  // unselect old items
-  globalStore.clearMultipleSelected()
-  // select new items
-  globalStore.multipleCardsSelectedIds = newCards.map(card => card.id)
-  globalStore.multipleBoxesSelectedIds = newBoxes.map(box => box.id)
-  globalStore.multipleConnectionsSelectedIds = newItems.connections.map(connection => connection.id)
-  globalStore.multipleListsSelectedIds = newLists.map(list => list.id)
-  newItems.lists.forEach(list => listStore.updateListDimensions(list))
-  return newCurrentList.id
-}
-
 const startListInfoInteraction = async (event) => {
+  let listId = props.list.id
   if (!currentListIsSelected.value) {
     globalStore.clearMultipleSelected()
   }
   if (isResizing.value) { return }
   if (!canEditSpace.value) { return }
-  globalStore.currentDraggingListId = ''
   globalStore.closeAllDialogs()
   globalStore.currentUserIsDraggingList = true
-  let listId = props.list.id
-  if (event.altKey) {
-    listId = await startDraggingDuplicateItems(event)
-  }
   globalStore.currentDraggingListId = listId
+  if (event.altKey) {
+    listId = await globalStore.startDraggingDuplicateItems('list', listId)
+    globalStore.currentDraggingListId = listId
+  }
   listStore.incrementListZ(listId)
 }
 const endListInfoInteraction = (event) => {

@@ -1270,7 +1270,7 @@ const startDraggingCard = async (event) => {
   globalStore.currentUserIsDraggingCard = true
   globalStore.currentDraggingCardId = cardId
   if (event.altKey) {
-    cardId = await globalStore.startDraggingDuplicateItems('card', props.card.id)
+    cardId = await globalStore.startDraggingDuplicateItems('card', cardId)
   }
   postMessage.sendHaptics({ name: 'softImpact' })
   const updates = {
