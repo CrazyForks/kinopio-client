@@ -937,6 +937,11 @@ export const useGlobalStore = defineStore('global', {
       const connectionStore = useConnectionStore()
       this.currentUserIsDraggingDuplicateItem = true
       // get selected items
+      // items inside box
+      if (draggingType === 'box') {
+        const box = boxStore.getBox(draggingItemId)
+        boxStore.selectItemsInSelectedBoxes(box)
+      }
       // lines
       let lineIds = this.multipleLinesSelectedIds.concat(this.currentDraggingLineId)
       lineIds = lineIds.filter(id => Boolean(id))
@@ -983,8 +988,8 @@ export const useGlobalStore = defineStore('global', {
         connections: utils.clone(connections),
         lines: utils.clone(lines)
       })
-      const itemTypes = ['cards', 'boxes', 'lists']
-      itemTypes.forEach(itemType => {
+      const zItemTypes = ['cards', 'boxes', 'lists']
+      zItemTypes.forEach(itemType => {
         newItems[itemType].map(item => {
           item.z += 1
           return item

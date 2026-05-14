@@ -388,51 +388,8 @@ const isResizing = computed(() => {
   const isCurrent = globalStore.currentUserIsResizingBoxIds.includes(props.box.id)
   return isResizing && isCurrent
 })
-const startDraggingDuplicateItems = async (event) => {
-  globalStore.currentUserIsDraggingDuplicateItem = true
-  // select box and items inside
-  boxStore.selectItemsInSelectedBoxes(props.box)
-  let boxIds = globalStore.multipleBoxesSelectedIds.concat([props.box.id])
-  boxIds = uniq(boxIds)
-  const boxes = boxIds.map(id => boxStore.getBox(id))
-  const index = boxIds.findIndex(id => id === props.box.id) || 0
-  // get selected items
-  const lists = listStore.getListsSelected
-  listStore.selectItemsInSelectedLists()
-  const cards = globalStore.multipleCardsSelectedIds.map(id => cardStore.getCard(id))
-  const connectionIds = globalStore.multipleConnectionsSelectedIds
-  const connections = connectionStore.getConnections(connectionIds)
-  // create new items
-  const newItems = await utils.uniqueSpaceItems({
-    cards: utils.clone(cards),
-    boxes: utils.clone(boxes),
-    connections: utils.clone(connections),
-    lists: utils.clone(lists)
-  })
-  const newCards = newItems.cards.map(card => {
-    card.z += 1
-    return card
-  })
-  const newBoxes = newItems.boxes.map(box => {
-    box.z += 1
-    return box
-  })
-  newItems.lists.forEach(list => listStore.createList({ list }))
-  newCards.forEach(card => cardStore.createCard(card, true))
-  newBoxes.forEach(box => boxStore.createBox(box))
-  newItems.connections.forEach(connection => connectionStore.createConnection(connection))
-  // unselect old items
-  globalStore.clearMultipleSelected()
-  // select new items
-  globalStore.multipleCardsSelectedIds = newCards.map(card => card.id)
-  globalStore.multipleBoxesSelectedIds = newBoxes.map(box => box.id)
-  globalStore.multipleConnectionsSelectedIds = newItems.connections.map(connection => connection.id)
-  globalStore.multipleListsSelectedIds = newItems.lists.map(list => list.id)
-  newItems.lists.forEach(list => listStore.updateListDimensions(list))
-  const newCurrentBox = newBoxes[index]
-  return newCurrentBox.id
-}
 const startBoxInfoInteraction = async (event) => {
+  let boxId = props.box.id
   if (event.target.closest('.connector')) {
     return
   }
@@ -440,14 +397,13 @@ const startBoxInfoInteraction = async (event) => {
     globalStore.clearMultipleSelected()
   }
   if (!canEditBox.value) { return }
-  globalStore.currentDraggingBoxId = ''
   globalStore.closeAllDialogs()
   globalStore.currentUserIsDraggingBox = true
-  let boxId = props.box.id
-  if (event.altKey) {
-    boxId = await startDraggingDuplicateItems(event)
-  }
   globalStore.currentDraggingBoxId = boxId
+  if (event.altKey) {
+    boxId = await globalStore.startDraggingDuplicateItems('box', boxId)
+    globalStore.currentDraggingBoxId = boxId
+  }
   boxStore.incrementBoxZ(boxId)
   globalStore.selectListsFromMultipleSelectedItems()
 }
