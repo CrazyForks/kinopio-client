@@ -927,6 +927,79 @@ export const useGlobalStore = defineStore('global', {
       this.drawingStrokeColors.push(color)
     },
 
+    // Duplicating items
+
+    async startDraggingDuplicateItems (draggingType, draggingItemId) {
+      const cardStore = useCardStore()
+      const boxStore = useBoxStore()
+      const lineStore = useLineStore()
+      const listStore = useListStore()
+      const connectionStore = useConnectionStore()
+      this.currentUserIsDraggingDuplicateItem = true
+      // get selected items
+      // lines
+      let lineIds = this.multipleLinesSelectedIds.concat(this.currentDraggingLineId)
+      lineIds = lineIds.filter(id => Boolean(id))
+      lineIds = uniq(lineIds)
+      const lines = lineIds.map(id => lineStore.getLine(id))
+      // lists
+      const listIds = this.multipleListsSelectedIds
+      const lists = listIds.map(id => listStore.getList(id))
+      this.multipleListsSelectedIds = lists.map(list => list.id)
+      listStore.selectItemsInSelectedLists()
+      // cards
+      const cards = this.multipleCardsSelectedIds.map(id => cardStore.getCard(id))
+      // boxes
+      const boxes = this.multipleBoxesSelectedIds.map(id => boxStore.getBox(id))
+      // connections
+      const itemIds = cards.concat(boxes).map(item => item.id)
+      const connections = connectionStore.getConnectionsByItemIds(itemIds)
+
+      // current dragging item index
+      let index = 0
+      if (draggingType === 'line') {
+        index = lineIds.findIndex(id => id === draggingItemId)
+      } // TODO else if
+
+      // create new items
+      const newItems = await utils.uniqueSpaceItems({
+        cards: utils.clone(cards),
+        boxes: utils.clone(boxes),
+        lists: utils.clone(lists),
+        connections: utils.clone(connections),
+        lines: utils.clone(lines)
+      })
+      const itemTypes = ['cards', 'boxes', 'lists']
+      itemTypes.forEach(itemType => {
+        newItems[itemType].map(item => {
+          item.z += 1
+          return item
+        })
+      })
+      newItems.connections.forEach(connection => connectionStore.createConnection(connection))
+      newItems.lists.forEach(list => listStore.createList({ list }))
+      newItems.cards.forEach(card => cardStore.createCard(card, true))
+      newItems.boxes.forEach(box => boxStore.createBox(box))
+      newItems.lines.forEach(line => lineStore.createLine(line))
+      // unselect old items
+      this.clearMultipleSelected()
+      // select new items
+      this.multipleCardsSelectedIds = newItems.cards.map(card => card.id)
+      this.multipleBoxesSelectedIds = newItems.boxes.map(box => box.id)
+      this.multipleConnectionsSelectedIds = newItems.connections.map(connection => connection.id)
+      this.multipleListsSelectedIds = newItems.lists.map(list => list.id)
+      this.multipleLinesSelectedIds = newItems.lines.map(line => line.id)
+      newItems.lists.forEach(list => listStore.updateListDimensions(list))
+
+      // return new current dragging item
+      let newCurrentItem
+      if (draggingType === 'line') {
+        newCurrentItem = newItems.lines[index]
+      }
+
+      return newCurrentItem.id
+    },
+
     // Dragging Cards
 
     addToRemoteCardsDragging (update) {
