@@ -943,24 +943,38 @@ export const useGlobalStore = defineStore('global', {
       lineIds = uniq(lineIds)
       const lines = lineIds.map(id => lineStore.getLine(id))
       // lists
-      const listIds = this.multipleListsSelectedIds
+      let listIds = this.multipleListsSelectedIds.concat(this.currentDraggingListId)
+      listIds = uniq(listIds)
+      listIds = listIds.filter(id => Boolean(id))
       const lists = listIds.map(id => listStore.getList(id))
       this.multipleListsSelectedIds = lists.map(list => list.id)
       listStore.selectItemsInSelectedLists()
       // cards
-      const cards = this.multipleCardsSelectedIds.map(id => cardStore.getCard(id))
+      let cardIds = this.multipleCardsSelectedIds.concat(this.currentDraggingCardId)
+      cardIds = uniq(cardIds)
+      cardIds = cardIds.filter(id => Boolean(id))
+
+      const cards = cardIds.map(id => cardStore.getCard(id))
       // boxes
-      const boxes = this.multipleBoxesSelectedIds.map(id => boxStore.getBox(id))
+      let boxIds = this.multipleBoxesSelectedIds.concat(this.currentDraggingBoxId)
+      boxIds = uniq(boxIds)
+      boxIds = boxIds.filter(id => Boolean(id))
+      const boxes = boxIds.map(id => boxStore.getBox(id))
       // connections
-      const itemIds = cards.concat(boxes).map(item => item.id)
-      const connections = connectionStore.getConnectionsByItemIds(itemIds)
-
+      const connectableItemIds = cards.concat(boxes).map(item => item.id)
+      const connections = connectionStore.getConnectionsByItemIds(connectableItemIds)
       // current dragging item index
-      let index = 0
+      let draggingItemIds
       if (draggingType === 'line') {
-        index = lineIds.findIndex(id => id === draggingItemId)
-      } // TODO else if
-
+        draggingItemIds = lineIds
+      } else if (draggingType === 'list') {
+        draggingItemIds = listIds
+      } else if (draggingType === 'card') {
+        draggingItemIds = cardIds
+      } else if (draggingType === 'box') {
+        draggingItemIds = boxIds
+      }
+      const index = draggingItemIds.findIndex(id => id === draggingItemId)
       // create new items
       const newItems = await utils.uniqueSpaceItems({
         cards: utils.clone(cards),
@@ -990,13 +1004,18 @@ export const useGlobalStore = defineStore('global', {
       this.multipleListsSelectedIds = newItems.lists.map(list => list.id)
       this.multipleLinesSelectedIds = newItems.lines.map(line => line.id)
       newItems.lists.forEach(list => listStore.updateListDimensions(list))
-
-      // return new current dragging item
-      let newCurrentItem
+      // new current dragging item
+      let newCurrentItems
       if (draggingType === 'line') {
-        newCurrentItem = newItems.lines[index]
+        newCurrentItems = newItems.lines
+      } else if (draggingType === 'list') {
+        newCurrentItems = newItems.lists
+      } else if (draggingType === 'card') {
+        newCurrentItems = newItems.cards
+      } else if (draggingType === 'box') {
+        newCurrentItems = newItems.boxes
       }
-
+      const newCurrentItem = newCurrentItems[index]
       return newCurrentItem.id
     },
 
